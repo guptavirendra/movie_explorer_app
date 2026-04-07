@@ -1,7 +1,12 @@
-
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() {
+void main() async {
+  // Ensure that the Flutter framework is initialized before loading environment variables
+  WidgetsFlutterBinding.ensureInitialized();
+  // Load environment variables from the .env file
+  await dotenv.load(fileName: ".env");
+
   runApp(const MyApp());
 }
 
