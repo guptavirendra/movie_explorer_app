@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:movie_explorer_app/injections/service_locator.dart';
 
 void main() async {
   // Ensure that the Flutter framework is initialized before loading environment variables
   WidgetsFlutterBinding.ensureInitialized();
   // Load environment variables from the .env file
   await dotenv.load(fileName: ".env");
+
+  // setup service locator for dependency injection
+  await init(); // Initialize dependencies
 
   runApp(const MyApp());
 }
