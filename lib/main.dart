@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:movie_explorer_app/injections/service_locator.dart';
 
 void main() async {
@@ -7,6 +8,9 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // Load environment variables from the .env file
   await dotenv.load(fileName: ".env");
+
+  // Initialize Hive for local storage
+  await Hive.initFlutter();
 
   // setup service locator for dependency injection
   await init(); // Initialize dependencies
