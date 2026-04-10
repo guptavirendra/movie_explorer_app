@@ -1,7 +1,7 @@
 import 'package:movie_explorer_app/features/movie/data/datasources/movie_local_datasource.dart';
 import 'package:movie_explorer_app/features/movie/data/datasources/movie_remote_data_source.dart';
 import 'package:movie_explorer_app/features/movie/data/models/movie_model.dart';
-import 'package:movie_explorer_app/features/movie/domain/entities/movies.dart';
+import 'package:movie_explorer_app/features/movie/domain/entities/movie.dart';
 import 'package:movie_explorer_app/features/movie/domain/repositories/movie_repository.dart';
 
 class MovieRepositoriesImpl implements MovieRepository {

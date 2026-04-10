@@ -1,7 +1,7 @@
 class PageParams {
   final int page;
 
-  PageParams(this.page);
+  PageParams({required this.page});
 }
 
 class MovieDetailsParams {

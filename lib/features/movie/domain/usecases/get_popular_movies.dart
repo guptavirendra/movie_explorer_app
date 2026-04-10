@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movie_explorer_app/core/util/usecase.dart';
-import 'package:movie_explorer_app/features/movie/domain/entities/movies.dart';
+import 'package:movie_explorer_app/features/movie/domain/entities/movie.dart';
 import 'package:movie_explorer_app/features/movie/domain/repositories/movie_repository.dart';
 import 'package:movie_explorer_app/features/movie/domain/usecases/params.dart';
 

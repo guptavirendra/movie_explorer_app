@@ -19,7 +19,7 @@ class MovieLoaded extends MovieState {
 class MovieError extends MovieState {
   final String message;
 
-  MovieError({required this.message});
+  MovieError(String string, {required this.message});
 
   @override
   get props => [message];

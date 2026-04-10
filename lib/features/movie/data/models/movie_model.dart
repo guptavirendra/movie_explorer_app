@@ -1,4 +1,4 @@
-import 'package:movie_explorer_app/features/movie/domain/entities/movies.dart';
+import 'package:movie_explorer_app/features/movie/domain/entities/movie.dart';
 
 class MovieModel {
   final int id;
