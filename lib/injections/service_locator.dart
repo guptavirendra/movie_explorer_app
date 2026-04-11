@@ -8,9 +8,11 @@ import 'package:movie_explorer_app/features/movie/data/datasources/movie_local_d
 import 'package:movie_explorer_app/features/movie/data/datasources/movie_remote_data_source.dart';
 import 'package:movie_explorer_app/features/movie/data/repositories/movie_repositories_impl.dart';
 import 'package:movie_explorer_app/features/movie/domain/repositories/movie_repository.dart';
+import 'package:movie_explorer_app/features/movie/domain/usecases/get_favourite.dart';
 import 'package:movie_explorer_app/features/movie/domain/usecases/get_movie_details.dart';
 import 'package:movie_explorer_app/features/movie/domain/usecases/get_popular_movies.dart';
 import 'package:movie_explorer_app/features/movie/domain/usecases/search_movie.dart';
+import 'package:movie_explorer_app/features/movie/domain/usecases/toggle_favourite.dart';
 import 'package:movie_explorer_app/features/movie/presentation/block/movie_bloc.dart';
 import 'package:movie_explorer_app/features/movie/presentation/cubit/movie_details_cubit.dart';
 
@@ -68,4 +70,8 @@ Future<void> init() async {
   singleton.registerFactory(() => MovieBloc(singleton()));
 
   singleton.registerFactory(() => MovieDetailsCubit(singleton()));
+
+
+  singleton.registerLazySingleton(() => ToggleFavourite(singleton()));
+  singleton.registerLazySingleton(() => GetFavourite(singleton()));
 }
