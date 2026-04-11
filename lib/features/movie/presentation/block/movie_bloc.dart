@@ -7,6 +7,7 @@ import 'movie_state.dart';
 
 class MovieBloc extends Bloc<MovieEvent, MovieState> {
   final GetPopularMovies getPopularMovies;
+  int totalPages = 1;
 
   PageParams page = PageParams(page: 1);
   bool isFetching = false;
@@ -24,12 +25,16 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
     emit(MovieLoading());
 
     try {
-      final movies = await getPopularMovies(page);
+      page = PageParams(page: 1);
+
+      final response = await getPopularMovies(page);
+
+      totalPages = response.totalPages;
 
       emit(
         MovieLoaded(
-          movies: movies,
-          hasReachedMax: movies.length < 20, // ✅ FIX
+          movies: response.movies,
+          hasReachedMax: page.page >= totalPages,
         ),
       );
     } catch (e) {
@@ -41,24 +46,23 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
     LoadMoreMovies event,
     Emitter<MovieState> emit,
   ) async {
-    if (isFetching ||
-        state is! MovieLoaded ||
-        (state as MovieLoaded).hasReachedMax) {
-      return;
-    }
+    if (isFetching || state is! MovieLoaded) return;
+
+    if (page.page >= totalPages) return; // ✅ STOP HERE
 
     isFetching = true;
-    page = PageParams(page: page.page + 1);
 
     final currentState = state as MovieLoaded;
 
     try {
-      final newMovies = await getPopularMovies(page);
-      print("Page: ${page.page}, Fetched: ${newMovies.length}");
+      page = PageParams(page: page.page + 1);
+
+      final response = await getPopularMovies(page);
+
       emit(
         MovieLoaded(
-          movies: [...currentState.movies, ...newMovies],
-          hasReachedMax: newMovies.length < 20,
+          movies: [...currentState.movies, ...response.movies],
+          hasReachedMax: page.page >= totalPages, // ✅ FINAL FIX
         ),
       );
     } catch (_) {}
@@ -67,15 +71,19 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
   }
 
   Future<void> _onRefresh(RefreshMovies event, Emitter<MovieState> emit) async {
-    page = PageParams(page: 1);
-
     try {
-      final movies = await getPopularMovies(page);
+      // ✅ Reset page
+      page = PageParams(page: 1);
+
+      final response = await getPopularMovies(page);
+
+      // ✅ Update total pages again
+      totalPages = response.totalPages;
 
       emit(
         MovieLoaded(
-          movies: movies,
-          hasReachedMax: movies.length < 20, // ✅ FIX
+          movies: response.movies,
+          hasReachedMax: page.page >= totalPages, // ✅ IMPORTANT
         ),
       );
     } catch (e) {

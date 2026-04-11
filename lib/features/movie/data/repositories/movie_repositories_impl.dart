@@ -2,16 +2,23 @@ import 'package:movie_explorer_app/features/movie/data/datasources/movie_local_d
 import 'package:movie_explorer_app/features/movie/data/datasources/movie_remote_data_source.dart';
 import 'package:movie_explorer_app/features/movie/data/models/movie_model.dart';
 import 'package:movie_explorer_app/features/movie/domain/entities/movie.dart';
+import 'package:movie_explorer_app/features/movie/domain/entities/movie_response.dart';
 import 'package:movie_explorer_app/features/movie/domain/repositories/movie_repository.dart';
 
 class MovieRepositoriesImpl implements MovieRepository {
   final MovieRemoteDataSource remoteDataSource;
   final MovieLocalDatasource localDataSource;
   MovieRepositoriesImpl(this.remoteDataSource, this.localDataSource);
+
   @override
-  Future<List<Movie>> getPopularMovies(int page) async {
-    final movies = await remoteDataSource.getPopularMovies(page);
-    return movies.map((movie) => movie.toEntity()).toList();
+  Future<MovieResponse> getPopularMovies(int page) async {
+    final data = await remoteDataSource.getPopularMovies(page);
+
+    final movies = (data['results'] as List)
+        .map((e) => MovieModel.fromJson(e).toEntity())
+        .toList();
+
+    return MovieResponse(movies: movies, totalPages: data['totalPages']);
   }
 
   @override

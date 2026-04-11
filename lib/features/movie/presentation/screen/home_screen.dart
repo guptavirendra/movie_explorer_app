@@ -48,6 +48,8 @@ class _HomeScreenState extends State<HomeScreen> {
             }
 
             if (state is MovieLoaded) {
+              final bloc = context.read<MovieBloc>();
+
               return Column(
                 children: [
                   Expanded(
@@ -67,7 +69,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
 
-                  if (!state.hasReachedMax && state.movies.isNotEmpty)
+                  // ✅ SHOW ONLY DURING LOAD MORE
+                  if (bloc.isFetching)
                     const Padding(
                       padding: EdgeInsets.all(16),
                       child: CircularProgressIndicator(),
