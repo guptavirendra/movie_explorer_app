@@ -49,30 +49,60 @@ class MovieDetailsScreen extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // Title
-                          Text(
-                            movie.title,
-                            style: const TextStyle(
-                              fontSize: 22,
-                              fontWeight: FontWeight.bold,
-                            ),
+                          /// 🔥 TITLE + FAVORITE BUTTON
+                          BlocBuilder<MovieDetailsCubit, MovieDetailsState>(
+                            builder: (context, state) {
+                              final cubit = context.read<MovieDetailsCubit>();
+
+                              return Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  /// Title
+                                  Expanded(
+                                    child: Text(
+                                      movie.title,
+                                      style: const TextStyle(
+                                        fontSize: 22,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+
+                                  /// ❤️ Favorite Button
+                                  IconButton(
+                                    icon: Icon(
+                                      cubit.isFavorite
+                                          ? Icons.favorite
+                                          : Icons.favorite_border,
+                                      color: Colors.red,
+                                    ),
+                                    onPressed: () {
+                                      print("❤️ Clicked"); // 👈 ADD THIS
+
+                                      cubit.toggleFav(movie);
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
                           ),
 
                           const SizedBox(height: 8),
 
-                          // Rating
+                          /// Rating
                           Text(
-                            "⭐ 1.0 ",
+                            "⭐ 1.0",
                           ), // Placeholder, replace with actual rating if available
 
                           const SizedBox(height: 8),
 
-                          // Release Date
+                          /// Release Date
                           Text("Release: ${movie.releaseDate}"),
 
                           const SizedBox(height: 12),
 
-                          // Overview
+                          /// Overview Title
                           const Text(
                             "Overview",
                             style: TextStyle(
@@ -83,6 +113,7 @@ class MovieDetailsScreen extends StatelessWidget {
 
                           const SizedBox(height: 6),
 
+                          /// Overview Text
                           Text(movie.overview),
                         ],
                       ),

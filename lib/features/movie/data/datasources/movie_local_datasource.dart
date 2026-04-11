@@ -14,11 +14,14 @@ class MovieLocalDatasourceImpl implements MovieLocalDatasource {
   Future<void> toggleFavorite(MovieModel movie) async {
     if (box.containsKey(movie.id)) {
       await box.delete(movie.id);
+      print("❌ Removed from favorites: ${movie.title}");
     } else {
       await box.put(movie.id, movie);
+      print("✅ Added to favorites: ${movie.title}");
     }
-  }
 
+    print("📦 Total favorites: ${box.length}");
+  }
   @override
   Future<List<MovieModel>> getFavorites() async {
     return box.values.cast<MovieModel>().toList();

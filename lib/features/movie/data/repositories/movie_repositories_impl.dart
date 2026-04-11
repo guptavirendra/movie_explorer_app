@@ -38,7 +38,7 @@ class MovieRepositoriesImpl implements MovieRepository {
       //rating: movie.rating,
       voteAverage: 1.0, // Placeholder, replace with actual rating if available
       releaseDate: movie.releaseDate,
-      voteCount: 1,
+      voteCount: 1, rating: 1.0,
     );
 
     await localDataSource.toggleFavorite(model);

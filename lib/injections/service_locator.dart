@@ -69,7 +69,9 @@ Future<void> init() async {
   // ----------------------------
   singleton.registerFactory(() => MovieBloc(singleton()));
 
-  singleton.registerFactory(() => MovieDetailsCubit(singleton(), singleton()));
+  singleton.registerFactory(
+    () => MovieDetailsCubit(singleton(), singleton(), singleton()),
+  );
 
   singleton.registerLazySingleton(() => ToggleFavourite(singleton()));
   singleton.registerLazySingleton(() => GetFavourite(singleton()));

@@ -1,13 +1,29 @@
+import 'package:hive/hive.dart';
 import 'package:movie_explorer_app/features/movie/domain/entities/movie.dart';
 
+part 'movie_model.g.dart'; // 🔥 IMPORTANT
+
+@HiveType(typeId: 0)
 class MovieModel {
+  @HiveField(0)
   final int id;
+
+  @HiveField(1)
   final String title;
+
+  @HiveField(2)
   final String overview;
+
+  @HiveField(3)
   final String posterPath;
+
+  @HiveField(4)
   final String backdropPath;
-  final double voteAverage;
-  final int voteCount;
+
+  @HiveField(5)
+  final double rating;
+
+  @HiveField(6)
   final String releaseDate;
 
   MovieModel({
@@ -16,34 +32,36 @@ class MovieModel {
     required this.overview,
     required this.posterPath,
     required this.backdropPath,
-    required this.voteAverage,
-    required this.voteCount,
+    required this.rating,
     required this.releaseDate,
+    required double voteAverage,
+    required int voteCount,
   });
 
   factory MovieModel.fromJson(Map<String, dynamic> json) {
     return MovieModel(
       id: json['id'],
-      title: json['title'],
-      overview: json['overview'],
+      title: json['title'] ?? '',
+      overview: json['overview'] ?? '',
       posterPath: json['poster_path'] ?? '',
       backdropPath: json['backdrop_path'] ?? '',
-      voteAverage: (json['vote_average'] as num).toDouble(),
-      voteCount: json['vote_count'],
-      releaseDate: json['release_date'],
+      rating: (json['vote_average'] ?? 0).toDouble(),
+      releaseDate: json['release_date'] ?? '',
+      voteAverage: (json['vote_average'] ?? 0).toDouble(),
+      voteCount: (json['vote_count'] ?? 0),
     );
   }
-
   Movie toEntity() {
     return Movie(
       id: id,
       title: title,
       overview: overview,
       posterPath: posterPath,
-      //backdropPath: backdropPath,
-      //voteAverage: voteAverage,
-      //voteCount: voteCount,
+      backdropPath: backdropPath,
+      rating: rating,
       releaseDate: releaseDate,
+      voteAverage: rating,
+      voteCount: rating.toInt(),
     );
   }
 }
