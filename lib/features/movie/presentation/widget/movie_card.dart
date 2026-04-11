@@ -4,6 +4,7 @@ import 'package:movie_explorer_app/features/movie/domain/entities/movie.dart';
 class MovieCard extends StatelessWidget {
   final Movie movie;
   final VoidCallback onTap;
+
   const MovieCard({super.key, required this.movie, required this.onTap});
 
   @override
@@ -12,14 +13,31 @@ class MovieCard extends StatelessWidget {
       onTap: onTap,
       child: Card(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Image.network(
-              "https://image.tmdb.org/t/p/w500${movie.posterPath}",
-              height: 150,
-              fit: BoxFit.cover,
+            Expanded(
+              child: Image.network(
+                "https://image.tmdb.org/t/p/w500${movie.posterPath}",
+                width: double.infinity,
+                fit: BoxFit.cover,
+              ),
             ),
-            Text(movie.title),
-            //Text("⭐ ${movie.rating}"),
+
+            Padding(
+              padding: const EdgeInsets.all(8),
+              child: Text(
+                movie.title,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: Text(
+                "⭐ ${1.0}",
+              ), // Placeholder, replace with actual rating if available
+            ),
           ],
         ),
       ),

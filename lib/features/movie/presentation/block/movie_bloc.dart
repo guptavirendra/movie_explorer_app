@@ -25,7 +25,13 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
 
     try {
       final movies = await getPopularMovies(page);
-      emit(MovieLoaded(movies: movies, hasReachedMax: false));
+
+      emit(
+        MovieLoaded(
+          movies: movies,
+          hasReachedMax: movies.length < 20, // ✅ FIX
+        ),
+      );
     } catch (e) {
       emit(MovieError(e.toString(), message: 'Failed to fetch movies'));
     }
@@ -35,7 +41,11 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
     LoadMoreMovies event,
     Emitter<MovieState> emit,
   ) async {
-    if (isFetching || state is! MovieLoaded) return;
+    if (isFetching ||
+        state is! MovieLoaded ||
+        (state as MovieLoaded).hasReachedMax) {
+      return;
+    }
 
     isFetching = true;
     page = PageParams(page: page.page + 1);
@@ -44,11 +54,11 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
 
     try {
       final newMovies = await getPopularMovies(page);
-
+      print("Page: ${page.page}, Fetched: ${newMovies.length}");
       emit(
         MovieLoaded(
           movies: [...currentState.movies, ...newMovies],
-          hasReachedMax: newMovies.isEmpty,
+          hasReachedMax: newMovies.length < 20,
         ),
       );
     } catch (_) {}
@@ -61,7 +71,13 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
 
     try {
       final movies = await getPopularMovies(page);
-      emit(MovieLoaded(movies: movies, hasReachedMax: false));
+
+      emit(
+        MovieLoaded(
+          movies: movies,
+          hasReachedMax: movies.length < 20, // ✅ FIX
+        ),
+      );
     } catch (e) {
       emit(MovieError(e.toString(), message: 'Failed to refresh movies'));
     }

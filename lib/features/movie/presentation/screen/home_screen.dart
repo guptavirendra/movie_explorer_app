@@ -48,18 +48,31 @@ class _HomeScreenState extends State<HomeScreen> {
             }
 
             if (state is MovieLoaded) {
-              return GridView.builder(
-                controller: _scrollController,
-                itemCount: state.movies.length,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 0.7,
-                ),
-                itemBuilder: (_, index) {
-                  final movie = state.movies[index];
+              return Column(
+                children: [
+                  Expanded(
+                    child: GridView.builder(
+                      controller: _scrollController,
+                      itemCount: state.movies.length,
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            childAspectRatio: 0.6,
+                          ),
+                      itemBuilder: (_, index) {
+                        final movie = state.movies[index];
 
-                  return MovieCard(movie: movie, onTap: () {});
-                },
+                        return MovieCard(movie: movie, onTap: () {});
+                      },
+                    ),
+                  ),
+
+                  if (!state.hasReachedMax && state.movies.isNotEmpty)
+                    const Padding(
+                      padding: EdgeInsets.all(16),
+                      child: CircularProgressIndicator(),
+                    ),
+                ],
               );
             }
 
