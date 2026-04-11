@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movie_explorer_app/features/movie/domain/usecases/params.dart';
 import 'package:movie_explorer_app/features/movie/presentation/cubit/movie_details_cubit.dart';
 import 'package:movie_explorer_app/features/movie/presentation/cubit/movie_details_state.dart';
 import 'package:movie_explorer_app/injections/service_locator.dart';
 
 class MovieDetailsScreen extends StatelessWidget {
-  final int movieId;
+  final MovieDetailsParams movieDetailsParams;
 
-  const MovieDetailsScreen({super.key, required this.movieId});
+  const MovieDetailsScreen({super.key, required this.movieDetailsParams});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => singleton<MovieDetailsCubit>()..fetchDetails(movieId),
+      create: (_) => singleton<MovieDetailsCubit>()..fetchMovieDetails(movieDetailsParams),
       child: Scaffold(
         appBar: AppBar(title: const Text("Movie Details")),
         body: BlocBuilder<MovieDetailsCubit, MovieDetailsState>(
