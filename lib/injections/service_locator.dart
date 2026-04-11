@@ -14,6 +14,7 @@ import 'package:movie_explorer_app/features/movie/domain/usecases/get_popular_mo
 import 'package:movie_explorer_app/features/movie/domain/usecases/search_movie.dart';
 import 'package:movie_explorer_app/features/movie/domain/usecases/toggle_favourite.dart';
 import 'package:movie_explorer_app/features/movie/presentation/block/movie_bloc.dart';
+import 'package:movie_explorer_app/features/movie/presentation/cubit/favourites_cubit.dart';
 import 'package:movie_explorer_app/features/movie/presentation/cubit/movie_details_cubit.dart';
 
 final singleton = GetIt.instance;
@@ -34,7 +35,7 @@ Future<void> init(Box<dynamic> box) async {
   // ----------------------------
   // Hive (MUST come before local datasource)
   // ----------------------------
-   singleton.registerLazySingleton(() => box);
+  singleton.registerLazySingleton(() => box);
 
   // ----------------------------
   // Data Sources
@@ -74,4 +75,9 @@ Future<void> init(Box<dynamic> box) async {
 
   singleton.registerLazySingleton(() => ToggleFavourite(singleton()));
   singleton.registerLazySingleton(() => GetFavourite(singleton()));
+
+  singleton.registerFactory(
+    () =>
+        FavouritesCubit(getFavorites: singleton(), toggleFavorite: singleton()),
+  );
 }
