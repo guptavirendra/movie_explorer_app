@@ -5,7 +5,7 @@ import 'package:movie_explorer_app/features/movie/data/models/movie_model.dart';
 abstract class MovieRemoteDataSource {
   Future<Map<String, dynamic>> getPopularMovies(int page);
   Future<MovieModel> getMovieDetails(int id);
-  Future<List<MovieModel>> searchMovies(String query);
+  Future<List<MovieModel>> searchMovies(String query, int page);
 }
 
 class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
@@ -34,10 +34,10 @@ class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
   }
 
   @override
-  Future<List<MovieModel>> searchMovies(String query) async {
+  Future<List<MovieModel>> searchMovies(String query, int page) async {
     final response = await dioClient.dio.get(
       ApiConstants.searchMovies,
-      queryParameters: {'query': query},
+      queryParameters: {'query': query, 'page': page},
     );
     final List results = response.data['results'];
     return results.map((movie) => MovieModel.fromJson(movie)).toList();

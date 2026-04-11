@@ -1,12 +1,17 @@
 import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movie_explorer_app/features/movie/domain/entities/movie.dart';
 import 'package:movie_explorer_app/features/movie/domain/usecases/search_movie.dart';
 import 'package:movie_explorer_app/features/movie/presentation/cubit/search_state.dart';
 
 class SearchCubit extends Cubit<SearchState> {
   final SearchMovies searchMovies;
   Timer? _debounce;
+  int page = 1;
+  bool isFetching = false;
+  String currentQuery = "";
+  List<Movie> movies = [];
 
   SearchCubit({required this.searchMovies}) : super(SearchInitial());
 
@@ -20,18 +25,34 @@ class SearchCubit extends Cubit<SearchState> {
       } else {
         emit(SearchLoading());
         try {
-          final movies = await searchMovies(
-            SearchParams(query: query, page: 1),
+          final result = await searchMovies(
+            SearchParams(query: query, page: page),
           );
-          if (movies.isEmpty) {
-            emit(SearchEmpty());
-          } else {
-            emit(SearchLoaded(movies: movies));
-          }
+          movies = result;
+          emit(SearchLoaded(movies: movies));
         } catch (e) {
           emit(SearchError(message: e.toString()));
         }
       }
     });
+  }
+
+  Future<void> loadMore() async {
+    if (isFetching || state is! SearchLoaded) return;
+
+    isFetching = true;
+    page++;
+
+    try {
+      final result = await searchMovies(
+        SearchParams(query: currentQuery, page: page),
+      );
+
+      movies.addAll(result);
+
+      emit(SearchLoaded(movies: movies));
+    } catch (_) {}
+
+    isFetching = false;
   }
 }

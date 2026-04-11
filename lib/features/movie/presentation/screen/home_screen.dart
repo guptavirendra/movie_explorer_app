@@ -4,9 +4,12 @@ import 'package:movie_explorer_app/features/movie/domain/usecases/params.dart';
 import 'package:movie_explorer_app/features/movie/presentation/block/movie_bloc.dart';
 import 'package:movie_explorer_app/features/movie/presentation/block/movie_event.dart';
 import 'package:movie_explorer_app/features/movie/presentation/block/movie_state.dart';
+import 'package:movie_explorer_app/features/movie/presentation/cubit/search_cubit.dart';
 import 'package:movie_explorer_app/features/movie/presentation/screen/favourite_screen.dart';
 import 'package:movie_explorer_app/features/movie/presentation/screen/movie_details_screen.dart';
+import 'package:movie_explorer_app/features/movie/presentation/screen/search_screen.dart';
 import 'package:movie_explorer_app/features/movie/presentation/widget/movie_card.dart';
+import 'package:movie_explorer_app/injections/service_locator.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -40,6 +43,20 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: const Text("Movies"),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.search),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => BlocProvider(
+                    create: (_) => singleton<SearchCubit>(),
+                    child: const SearchScreen(),
+                  ),
+                ),
+              );
+            },
+          ),
           IconButton(
             icon: const Icon(Icons.favorite),
             onPressed: () {

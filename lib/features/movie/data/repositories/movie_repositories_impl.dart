@@ -52,7 +52,7 @@ class MovieRepositoriesImpl implements MovieRepository {
 
   @override
   Future<List<Movie>> searchMovies(String query, int page) async {
-    final result = await remoteDataSource.searchMovies(query);
+    final result = await remoteDataSource.searchMovies(query, page);
     return result.map((e) => e.toEntity()).toList();
   }
 }
