@@ -18,7 +18,7 @@ import 'package:movie_explorer_app/features/movie/presentation/cubit/movie_detai
 
 final singleton = GetIt.instance;
 
-Future<void> init() async {
+Future<void> init(Box<dynamic> box) async {
   // ----------------------------
   // External
   // ----------------------------
@@ -34,8 +34,7 @@ Future<void> init() async {
   // ----------------------------
   // Hive (MUST come before local datasource)
   // ----------------------------
-  final box = await Hive.openBox('favorites');
-  singleton.registerLazySingleton(() => box);
+   singleton.registerLazySingleton(() => box);
 
   // ----------------------------
   // Data Sources

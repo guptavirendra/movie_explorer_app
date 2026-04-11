@@ -18,11 +18,10 @@ void main() async {
 
   // ✅ REGISTER ADAPTER
   Hive.registerAdapter(MovieModelAdapter());
-  await Hive.openBox('favorites');
-
+  final box = await Hive.openBox('favorites');
   // setup service locator for dependency injection
-  await init(); // Initialize dependencies
-
+  // ✅ Pass box to DI
+  await init(box);
   runApp(
     MaterialApp(
       home: BlocProvider(
