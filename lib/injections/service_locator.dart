@@ -12,6 +12,7 @@ import 'package:movie_explorer_app/features/movie/domain/usecases/get_movie_deta
 import 'package:movie_explorer_app/features/movie/domain/usecases/get_popular_movies.dart';
 import 'package:movie_explorer_app/features/movie/domain/usecases/search_movie.dart';
 import 'package:movie_explorer_app/features/movie/presentation/block/movie_bloc.dart';
+import 'package:movie_explorer_app/features/movie/presentation/cubit/movie_details_cubit.dart';
 
 final singleton = GetIt.instance;
 
@@ -65,4 +66,6 @@ Future<void> init() async {
   // Bloc (Factory ❗)
   // ----------------------------
   singleton.registerFactory(() => MovieBloc(singleton()));
+
+  singleton.registerFactory(() => MovieDetailsCubit(singleton()));
 }
