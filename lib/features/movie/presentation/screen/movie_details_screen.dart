@@ -13,7 +13,8 @@ class MovieDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => singleton<MovieDetailsCubit>()..fetchMovieDetails(movieDetailsParams),
+      create: (_) =>
+          singleton<MovieDetailsCubit>()..fetchMovieDetails(movieDetailsParams),
       child: Scaffold(
         appBar: AppBar(title: const Text("Movie Details")),
         body: BlocBuilder<MovieDetailsCubit, MovieDetailsState>(
@@ -35,7 +36,7 @@ class MovieDetailsScreen extends StatelessWidget {
                   children: [
                     // Backdrop Image
                     Image.network(
-                      "https://image.tmdb.org/t/p/w500${movie.backdropPath}",
+                      "https://image.tmdb.org/t/p/w500${movie.posterPath}",
                       width: double.infinity,
                       height: 250,
                       fit: BoxFit.cover,

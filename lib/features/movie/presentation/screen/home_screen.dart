@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movie_explorer_app/features/movie/domain/usecases/params.dart';
 import 'package:movie_explorer_app/features/movie/presentation/block/movie_bloc.dart';
 import 'package:movie_explorer_app/features/movie/presentation/block/movie_event.dart';
 import 'package:movie_explorer_app/features/movie/presentation/block/movie_state.dart';
+import 'package:movie_explorer_app/features/movie/presentation/screen/movie_details_screen.dart';
 import 'package:movie_explorer_app/features/movie/presentation/widget/movie_card.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -64,7 +66,21 @@ class _HomeScreenState extends State<HomeScreen> {
                       itemBuilder: (_, index) {
                         final movie = state.movies[index];
 
-                        return MovieCard(movie: movie, onTap: () {});
+                        return MovieCard(
+                          movie: movie,
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => MovieDetailsScreen(
+                                  movieDetailsParams: MovieDetailsParams(
+                                    movie.id,
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        );
                       },
                     ),
                   ),
