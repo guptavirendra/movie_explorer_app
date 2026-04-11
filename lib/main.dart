@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:movie_explorer_app/core/routes/app_routes.dart';
 import 'package:movie_explorer_app/features/movie/data/models/movie_model.dart';
-import 'package:movie_explorer_app/features/movie/presentation/block/movie_bloc.dart';
-import 'package:movie_explorer_app/features/movie/presentation/screen/home_screen.dart';
 import 'package:movie_explorer_app/injections/service_locator.dart';
 
 void main() async {
@@ -25,11 +23,10 @@ void main() async {
   // ✅ Pass box to DI
   await init(box);
   runApp(
+    
     MaterialApp(
-      home: BlocProvider(
-        create: (_) => singleton<MovieBloc>(),
-        child: const HomeScreen(),
-      ),
+      onGenerateRoute: AppRoutes.generateRoute,
+      initialRoute: AppRoutes.home,
     ),
   );
 }

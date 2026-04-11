@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movie_explorer_app/core/routes/app_routes.dart';
 import 'package:movie_explorer_app/features/movie/domain/usecases/params.dart';
 import 'package:movie_explorer_app/features/movie/presentation/block/movie_bloc.dart';
 import 'package:movie_explorer_app/features/movie/presentation/block/movie_event.dart';
 import 'package:movie_explorer_app/features/movie/presentation/block/movie_state.dart';
-import 'package:movie_explorer_app/features/movie/presentation/cubit/search_cubit.dart';
-import 'package:movie_explorer_app/features/movie/presentation/screen/favourite_screen.dart';
-import 'package:movie_explorer_app/features/movie/presentation/screen/movie_details_screen.dart';
-import 'package:movie_explorer_app/features/movie/presentation/screen/search_screen.dart';
 import 'package:movie_explorer_app/features/movie/presentation/widget/movie_card.dart';
-import 'package:movie_explorer_app/injections/service_locator.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -46,24 +42,13 @@ class _HomeScreenState extends State<HomeScreen> {
           IconButton(
             icon: const Icon(Icons.search),
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => BlocProvider(
-                    create: (_) => singleton<SearchCubit>(),
-                    child: const SearchScreen(),
-                  ),
-                ),
-              );
+              Navigator.pushNamed(context, AppRoutes.search);
             },
           ),
           IconButton(
             icon: const Icon(Icons.favorite),
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const FavouriteScreen()),
-              );
+              Navigator.pushNamed(context, AppRoutes.favourites);
             },
           ),
         ],
@@ -100,15 +85,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         return MovieCard(
                           movie: movie,
                           onTap: () {
-                            Navigator.push(
+                            Navigator.pushNamed(
                               context,
-                              MaterialPageRoute(
-                                builder: (_) => MovieDetailsScreen(
-                                  movieDetailsParams: MovieDetailsParams(
-                                    movie.id,
-                                  ),
-                                ),
-                              ),
+                              AppRoutes.details,
+                              arguments: MovieDetailsParams(movie.id),
                             );
                           },
                         );
