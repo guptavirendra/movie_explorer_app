@@ -16,6 +16,7 @@ import 'package:movie_explorer_app/features/movie/domain/usecases/toggle_favouri
 import 'package:movie_explorer_app/features/movie/presentation/block/movie_bloc.dart';
 import 'package:movie_explorer_app/features/movie/presentation/cubit/favourites_cubit.dart';
 import 'package:movie_explorer_app/features/movie/presentation/cubit/movie_details_cubit.dart';
+import 'package:movie_explorer_app/features/movie/presentation/cubit/search_cubit.dart';
 
 final singleton = GetIt.instance;
 
@@ -80,4 +81,6 @@ Future<void> init(Box<dynamic> box) async {
     () =>
         FavouritesCubit(getFavorites: singleton(), toggleFavorite: singleton()),
   );
+
+  singleton.registerFactory(() => SearchCubit(searchMovies: singleton()));
 }
