@@ -21,7 +21,7 @@ class MovieModel {
   final String backdropPath;
 
   @HiveField(5)
-  final double rating;
+  final double? rating;
 
   @HiveField(6)
   final String releaseDate;
@@ -58,10 +58,10 @@ class MovieModel {
       overview: overview,
       posterPath: posterPath,
       backdropPath: backdropPath,
-      rating: rating,
+      rating: rating ?? 0.0,
       releaseDate: releaseDate,
-      voteAverage: rating,
-      voteCount: rating.toInt(),
+      voteAverage: rating ?? 0.0,
+      voteCount: (rating ?? 0.0).toInt(),
     );
   }
 }

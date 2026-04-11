@@ -18,6 +18,8 @@ void main() async {
 
   // ✅ REGISTER ADAPTER
   Hive.registerAdapter(MovieModelAdapter());
+  await Hive.deleteBoxFromDisk('favorites');
+
   final box = await Hive.openBox('favorites');
   // setup service locator for dependency injection
   // ✅ Pass box to DI

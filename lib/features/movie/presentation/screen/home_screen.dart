@@ -4,6 +4,7 @@ import 'package:movie_explorer_app/features/movie/domain/usecases/params.dart';
 import 'package:movie_explorer_app/features/movie/presentation/block/movie_bloc.dart';
 import 'package:movie_explorer_app/features/movie/presentation/block/movie_event.dart';
 import 'package:movie_explorer_app/features/movie/presentation/block/movie_state.dart';
+import 'package:movie_explorer_app/features/movie/presentation/screen/favourite_screen.dart';
 import 'package:movie_explorer_app/features/movie/presentation/screen/movie_details_screen.dart';
 import 'package:movie_explorer_app/features/movie/presentation/widget/movie_card.dart';
 
@@ -36,7 +37,20 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Movies")),
+      appBar: AppBar(
+        title: const Text("Movies"),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.favorite),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const FavouriteScreen()),
+              );
+            },
+          ),
+        ],
+      ),
       body: RefreshIndicator(
         onRefresh: _onRefresh,
         child: BlocBuilder<MovieBloc, MovieState>(
