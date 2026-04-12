@@ -39,7 +39,7 @@ void main() {
           .thenAnswer((_) async => tMovieModel.toEntity());
 
       // 🎬 Act: Get details for movie ID 550
-      final params = MovieDetailsParams(movieId: 550);
+      final params = MovieDetailsParams(550);
       final result = await getMovieDetails(params);
 
       // ✔️ Assert: Verify movie details are correct
@@ -63,7 +63,7 @@ void main() {
           .thenAnswer((_) async => tMovieModel.toEntity());
 
       // 🎬 Act: Request movie with ID 100
-      final params = MovieDetailsParams(movieId: 100);
+      final params = MovieDetailsParams(100);
       await getMovieDetails(params);
 
       // ✔️ Assert: Verify correct movie ID was passed
@@ -80,7 +80,8 @@ void main() {
       final detailedMovie = MovieModel(
         id: 550,
         title: "Fight Club",
-        overview: "An insomniac office worker and a devil-may-care soap maker...",
+        overview:
+            "An insomniac office worker and a devil-may-care soap maker...",
         posterPath: "/posters/fightclub.jpg",
         rating: 8.8,
         releaseDate: "1999-10-15",
@@ -90,7 +91,7 @@ void main() {
           .thenAnswer((_) async => detailedMovie.toEntity());
 
       // 🎬 Act: Get movie details
-      final params = MovieDetailsParams(movieId: 550);
+      final params = MovieDetailsParams(550);
       final result = await getMovieDetails(params);
 
       // ✔️ Assert: Verify all fields are present
@@ -113,7 +114,7 @@ void main() {
           .thenThrow(Exception('Movie not found'));
 
       // 🎬 Act & Assert: Verify exception is thrown
-      final params = MovieDetailsParams(movieId: 99999);
+      final params = MovieDetailsParams(99999);
       expect(
         () => getMovieDetails(params),
         throwsException,
@@ -127,8 +128,22 @@ void main() {
     'GetMovieDetails should handle multiple sequential requests',
     () async {
       // 🔧 Arrange: Setup mocks for multiple IDs
-      final movie1 = MovieModel(id: 1, title: "Movie 1", overview: "Overview 1", posterPath: "/1.jpg", rating: 8.0, releaseDate: "2020-01-01").toEntity();
-      final movie2 = MovieModel(id: 2, title: "Movie 2", overview: "Overview 2", posterPath: "/2.jpg", rating: 7.5, releaseDate: "2020-02-01").toEntity();
+      final movie1 = MovieModel(
+              id: 1,
+              title: "Movie 1",
+              overview: "Overview 1",
+              posterPath: "/1.jpg",
+              rating: 8.0,
+              releaseDate: "2020-01-01")
+          .toEntity();
+      final movie2 = MovieModel(
+              id: 2,
+              title: "Movie 2",
+              overview: "Overview 2",
+              posterPath: "/2.jpg",
+              rating: 7.5,
+              releaseDate: "2020-02-01")
+          .toEntity();
 
       when(() => mockMovieRepository.getMovieDetails(1))
           .thenAnswer((_) async => movie1);
@@ -136,8 +151,8 @@ void main() {
           .thenAnswer((_) async => movie2);
 
       // 🎬 Act: Make two requests
-      final result1 = await getMovieDetails(MovieDetailsParams(movieId: 1));
-      final result2 = await getMovieDetails(MovieDetailsParams(movieId: 2));
+      final result1 = await getMovieDetails(MovieDetailsParams(1));
+      final result2 = await getMovieDetails(MovieDetailsParams(2));
 
       // ✔️ Assert: Verify both requests returned correct data
       expect(result1.id, 1);
@@ -157,7 +172,7 @@ void main() {
           .thenThrow(Exception('Network timeout'));
 
       // 🎬 Act & Assert: Verify error is propagated
-      final params = MovieDetailsParams(movieId: 550);
+      final params = MovieDetailsParams(550);
       expect(
         () => getMovieDetails(params),
         throwsException,
