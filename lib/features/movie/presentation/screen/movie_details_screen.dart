@@ -37,6 +37,10 @@ class MovieDetailsScreen extends StatelessWidget {
                   children: [
                     // Backdrop Image
                     CachedNetworkImage(
+                      height: 300,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+
                       imageUrl:
                           "https://image.tmdb.org/t/p/w200${movie.posterPath}",
                       placeholder: (_, __) =>
