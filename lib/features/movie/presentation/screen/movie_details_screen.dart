@@ -99,7 +99,7 @@ class MovieDetailsScreen extends StatelessWidget {
 
                           /// Rating
                           Text(
-                            "⭐ 1.0",
+                            "⭐ ${movie.rating}",
                           ), // Placeholder, replace with actual rating if available
 
                           const SizedBox(height: 8),

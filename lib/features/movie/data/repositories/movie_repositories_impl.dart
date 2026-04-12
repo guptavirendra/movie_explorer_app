@@ -21,22 +21,19 @@ class MovieRepositoriesImpl implements MovieRepository {
 
   @override
   Future<MovieResponse> getPopularMovies(int page) async {
-    debugPrint("MovieRepositoriesImpl: getPopularMovies called with page: $page"); // ✅ debug log
     if (!await networkInfo.isConnected) {
       debugPrint("No internet connection detected."); // ✅ debug log
       throw NetworkFailure(); // ✅ clean error for no internet
     }
     try {
-      debugPrint("Fetching popular movies from remote data source..."); // ✅ debug log
       final data = await remoteDataSource.getPopularMovies(page);
-
       final movies = (data['results'] as List)
           .map((e) => MovieModel.fromJson(e).toEntity())
           .toList();
 
       return MovieResponse(movies: movies, totalPages: data['totalPages']);
     } on DioException catch (_) {
-      debugPrint("DioException caught while fetching popular movies."); // ✅ debug log
+      // ✅ debug log
       throw ServerFailure(); // ✅ clean error
     }
   }
@@ -63,12 +60,8 @@ class MovieRepositoriesImpl implements MovieRepository {
       title: movie.title,
       overview: movie.overview,
       posterPath: movie.posterPath,
-      backdropPath: movie.posterPath,
-      //rating: movie.rating,
-      voteAverage: 1.0, // Placeholder, replace with actual rating if available
+      rating: movie.rating,
       releaseDate: movie.releaseDate,
-      voteCount: 1,
-      rating: 1.0,
     );
 
     await localDataSource.toggleFavorite(model);

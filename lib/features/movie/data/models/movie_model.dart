@@ -18,12 +18,9 @@ class MovieModel {
   final String posterPath;
 
   @HiveField(4)
-  final String backdropPath;
-
-  @HiveField(5)
   final double? rating;
 
-  @HiveField(6)
+  @HiveField(5)
   final String releaseDate;
 
   MovieModel({
@@ -31,11 +28,8 @@ class MovieModel {
     required this.title,
     required this.overview,
     required this.posterPath,
-    required this.backdropPath,
     required this.rating,
     required this.releaseDate,
-    required double voteAverage,
-    required int voteCount,
   });
 
   factory MovieModel.fromJson(Map<String, dynamic> json) {
@@ -44,11 +38,8 @@ class MovieModel {
       title: json['title'] ?? '',
       overview: json['overview'] ?? '',
       posterPath: json['poster_path'] ?? '',
-      backdropPath: json['backdrop_path'] ?? '',
       rating: (json['vote_average'] ?? 0).toDouble(),
       releaseDate: json['release_date'] ?? '',
-      voteAverage: (json['vote_average'] ?? 0).toDouble(),
-      voteCount: (json['vote_count'] ?? 0),
     );
   }
   Movie toEntity() {
@@ -57,11 +48,8 @@ class MovieModel {
       title: title,
       overview: overview,
       posterPath: posterPath,
-      backdropPath: backdropPath,
       rating: rating ?? 0.0,
       releaseDate: releaseDate,
-      voteAverage: rating ?? 0.0,
-      voteCount: (rating ?? 0.0).toInt(),
     );
   }
 }

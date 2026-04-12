@@ -37,7 +37,7 @@ class MovieCard extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8),
               child: Text(
-                "⭐ ${1.0}",
+                "⭐ ${movie.rating}",
               ), // Placeholder, replace with actual rating if available
             ),
           ],

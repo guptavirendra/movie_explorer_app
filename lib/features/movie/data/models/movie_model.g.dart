@@ -21,11 +21,8 @@ class MovieModelAdapter extends TypeAdapter<MovieModel> {
       title: fields[1] as String,
       overview: fields[2] as String,
       posterPath: fields[3] as String,
-      backdropPath: fields[4] as String,
-      rating: fields[5] as double,
-      releaseDate: fields[6] as String,
-      voteAverage: fields[7] as double,
-      voteCount: fields[8] as int,
+      rating: fields[4] as double,
+      releaseDate: fields[5] as String,
     );
   }
 
@@ -42,10 +39,8 @@ class MovieModelAdapter extends TypeAdapter<MovieModel> {
       ..writeByte(3)
       ..write(obj.posterPath)
       ..writeByte(4)
-      ..write(obj.backdropPath)
-      ..writeByte(5)
       ..write(obj.rating)
-      ..writeByte(6)
+      ..writeByte(5)
       ..write(obj.releaseDate);
   }
 

@@ -14,10 +14,7 @@ class Movie extends Equatable {
     required this.overview,
     required this.posterPath,
     required this.releaseDate,
-    required String backdropPath,
     required this.rating,
-    required voteAverage,
-    required voteCount,
   });
 
   @override
