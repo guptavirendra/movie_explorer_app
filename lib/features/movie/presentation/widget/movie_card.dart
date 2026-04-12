@@ -17,14 +17,20 @@ class MovieCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
-              child: CachedNetworkImage(
-                imageUrl: "https://image.tmdb.org/t/p/w200${movie.posterPath}",
-                placeholder: (_, __) =>
-                    const Center(child: CircularProgressIndicator()),
-                errorWidget: (_, __, ___) => const Icon(Icons.broken_image),
+              child: ClipRRect(
+                borderRadius:
+                    const BorderRadius.vertical(top: Radius.circular(4)),
+                child: CachedNetworkImage(
+                  imageUrl:
+                      "https://image.tmdb.org/t/p/w200${movie.posterPath}",
+                  fit: BoxFit.cover,
+                  placeholder: (_, __) => const Center(
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  ),
+                  errorWidget: (_, __, ___) => const Icon(Icons.broken_image),
+                ),
               ),
             ),
-
             Padding(
               padding: const EdgeInsets.all(8),
               child: Text(
@@ -33,7 +39,6 @@ class MovieCard extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
               ),
             ),
-
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8),
               child: Text(
