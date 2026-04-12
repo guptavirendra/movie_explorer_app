@@ -1,11 +1,12 @@
+import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:movie_explorer_app/core/error/failures.dart';
+import 'package:movie_explorer_app/core/network/network_info.dart';
 import 'package:movie_explorer_app/features/movie/data/datasources/movie_local_datasource.dart';
 import 'package:movie_explorer_app/features/movie/data/datasources/movie_remote_data_source.dart';
 import 'package:movie_explorer_app/features/movie/data/models/movie_model.dart';
 import 'package:movie_explorer_app/features/movie/data/repositories/movie_repositories_impl.dart';
-import 'package:movie_explorer_app/core/network/network_info.dart';
 
 // 🎯 Mock classes for dependencies
 class MockRemoteDataSource extends Mock implements MovieRemoteDataSource {}
@@ -13,6 +14,9 @@ class MockRemoteDataSource extends Mock implements MovieRemoteDataSource {}
 class MockLocalDataSource extends Mock implements MovieLocalDatasource {}
 
 class MockNetworkInfo extends Mock implements NetworkInfo {}
+
+// 🔧 Fallback values for mocktail
+class FakeRequestOptions extends Fake implements RequestOptions {}
 
 void main() {
   // 📦 Setup variables
@@ -106,7 +110,7 @@ void main() {
       // 🔧 Arrange: Setup network connected but server error
       when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => true);
       when(() => mockRemoteDataSource.getPopularMovies(1))
-          .thenThrow(ServerException());
+          .thenThrow(ServerException(message: 'Server error', statusCode: 500));
 
       // 🎬 Act & Assert: Verify ServerFailure is thrown
       expect(
@@ -172,7 +176,7 @@ void main() {
     () async {
       // 🔧 Arrange: Simulate connection error
       when(() => mockRemoteDataSource.getMovieDetails(1))
-          .thenThrow(DioException(requestOptions: RequestOptions(path: '')));
+          .thenThrow(DioException(requestOptions: FakeRequestOptions()));
 
       // 🎬 Act & Assert: Verify NetworkFailure is thrown
       expect(
@@ -326,18 +330,4 @@ void main() {
 }
 
 // 🔥 Extension for DioException
-extension on DioException {
-  factory DioException({
-    required RequestOptions requestOptions,
-    dynamic error,
-    StackTrace? stackTrace,
-    DioExceptionType? type,
-  }) {
-    return DioException(
-      requestOptions: requestOptions,
-      error: error,
-      stackTrace: stackTrace ?? StackTrace.current,
-      type: type ?? DioExceptionType.unknown,
-    );
-  }
-}
+extension on DioException {}
