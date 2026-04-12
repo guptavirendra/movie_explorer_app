@@ -1,4 +1,6 @@
+import 'package:dio/dio.dart';
 import 'package:movie_explorer_app/core/constants/api_constants.dart';
+import 'package:movie_explorer_app/core/error/failures.dart';
 import 'package:movie_explorer_app/core/network/dio_client.dart';
 import 'package:movie_explorer_app/features/movie/data/models/movie_model.dart';
 
@@ -14,15 +16,22 @@ class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
 
   @override
   Future<Map<String, dynamic>> getPopularMovies(int page) async {
-    final response = await dioClient.dio.get(
-      ApiConstants.popularMovies,
-      queryParameters: {'page': page},
-    );
+    try {
+      final response = await dioClient.dio.get(
+        ApiConstants.popularMovies,
+        queryParameters: {'page': page},
+      );
 
-    return {
-      "results": response.data['results'],
-      "totalPages": response.data['total_pages'],
-    };
+      return {
+        "results": response.data['results'],
+        "totalPages": response.data['total_pages'],
+      };
+    } on DioException catch (e) {
+      throw ServerException(
+        message: e.response?.statusMessage ?? "Server Error",
+        statusCode: e.response?.statusCode ?? 500,
+      );
+    }
   }
 
   @override

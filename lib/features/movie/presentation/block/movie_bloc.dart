@@ -41,13 +41,12 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
           hasReachedMax: page.page >= totalPages,
         ),
       );
+    } on NetworkFailure {
+      emit(MovieError(message: 'Please check your connection and try again.'));
+    } on ServerFailure catch (e) {
+      emit(MovieError(message: 'Server error: ${e.message}'));
     } catch (e) {
-      debugPrint("Error fetching movies: $e"); // ✅ debug log
-      if (e is Failure) {
-        emit(MovieError(e.message, message: 'Failed to fetch movies'));
-      } else {
-        emit(MovieError(e.toString(), message: 'Failed to fetch movies'));
-      }
+      emit(MovieError(message: 'An unexpected error occurred'));
     }
   }
 
@@ -96,7 +95,7 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
         ),
       );
     } catch (e) {
-      emit(MovieError(e.toString(), message: 'Failed to refresh movies'));
+      emit(MovieError(message: 'Failed to refresh movies'));
     }
   }
 }

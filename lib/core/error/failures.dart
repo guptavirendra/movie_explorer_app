@@ -17,3 +17,10 @@ class NetworkFailure extends Failure {
   NetworkFailure()
     : super("An error occurred while fetching data from the network.");
 }
+
+class ServerException implements Exception {
+  final String message;
+  final int statusCode;
+
+  ServerException({required this.message, required this.statusCode});
+}

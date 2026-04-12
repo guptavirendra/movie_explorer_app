@@ -32,9 +32,8 @@ class MovieRepositoriesImpl implements MovieRepository {
           .toList();
 
       return MovieResponse(movies: movies, totalPages: data['totalPages']);
-    } on DioException catch (_) {
-      // ✅ debug log
-      throw ServerFailure(); // ✅ clean error
+    } on ServerException catch (_) {
+      throw ServerFailure(); // ✅ pass server error details
     }
   }
 
