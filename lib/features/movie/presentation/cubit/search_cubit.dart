@@ -24,6 +24,8 @@ class SearchCubit extends Cubit<SearchState> {
         emit(SearchInitial());
         return;
       } else {
+        currentQuery = query;
+        page = 1;
         emit(SearchLoading());
         try {
           final result = await searchMovies(
@@ -43,21 +45,53 @@ class SearchCubit extends Cubit<SearchState> {
   }
 
   Future<void> loadMore() async {
-    if (isFetching || state is! SearchLoaded) return;
+    if (state is! SearchLoaded) return;
 
-    isFetching = true;
-    page++;
+    final currentState = state as SearchLoaded;
+
+    if (currentState.hasReachedMax || currentState.isLoadingMore) return;
+
+    // ✅ show loader
+    emit(currentState.copyWith(isLoadingMore: true));
 
     try {
-      final result = await searchMovies(
+      page++;
+
+      final newMovies = await searchMovies(
         SearchParams(query: currentQuery, page: page),
       );
 
-      movies.addAll(result);
+      emit(
+        currentState.copyWith(
+          movies: [...currentState.movies, ...newMovies],
+          hasReachedMax: newMovies.isEmpty,
+          isLoadingMore: false,
+        ),
+      );
+    } catch (e) {
+      emit(currentState.copyWith(isLoadingMore: false));
+    }
+  }
 
-      emit(SearchLoaded(movies: movies));
-    } catch (_) {}
+  Future<void> retry() async {
+    if (currentQuery.isEmpty) return;
 
-    isFetching = false;
+    page = 1;
+
+    emit(SearchLoading());
+
+    try {
+      final movies = await searchMovies(
+        SearchParams(query: currentQuery, page: page),
+      );
+
+      if (movies.isEmpty) {
+        emit(SearchEmpty());
+      } else {
+        emit(SearchLoaded(movies: movies, hasReachedMax: false));
+      }
+    } catch (e) {
+      emit(SearchError(message: e.toString()));
+    }
   }
 }

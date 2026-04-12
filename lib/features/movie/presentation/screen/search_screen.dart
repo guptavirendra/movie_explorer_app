@@ -69,28 +69,52 @@ class _SearchScreenState extends State<SearchScreen> {
                 }
 
                 if (state is SearchError) {
-                  return Center(child: Text(state.message));
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(state.message),
+                        const SizedBox(height: 12),
+                        ElevatedButton(
+                          onPressed: () {
+                            context.read<SearchCubit>().retry();
+                          },
+                          child: const Text("Retry"),
+                        ),
+                      ],
+                    ),
+                  );
                 }
 
                 if (state is SearchLoaded) {
                   return ListView.builder(
                     controller: _scrollController,
-                    itemCount: state.movies.length,
+                    itemCount:
+                        state.movies.length + (state.isLoadingMore ? 1 : 0),
                     itemBuilder: (_, index) {
+                      if (index >= state.movies.length) {
+                        return const Padding(
+                          padding: EdgeInsets.all(16),
+                          child: Center(child: CircularProgressIndicator()),
+                        );
+                      }
+
                       final movie = state.movies[index];
 
                       return ListTile(
-                        leading: movie.posterPath.isNotEmpty
-                            ? CachedNetworkImage(
-                                imageUrl:
-                                    "https://image.tmdb.org/t/p/w200${movie.posterPath}",
-                                placeholder: (_, __) => const Center(
-                                  child: CircularProgressIndicator(),
-                                ),
-                                errorWidget: (_, __, ___) =>
-                                    const Icon(Icons.broken_image),
-                              )
-                            : const Icon(Icons.movie),
+                        leading: SizedBox(
+                          width: 60,
+                          height: 90,
+                          child:
+                              movie.posterPath != null &&
+                                  movie.posterPath!.isNotEmpty
+                              ? CachedNetworkImage(
+                                  imageUrl:
+                                      "https://image.tmdb.org/t/p/w200${movie.posterPath}",
+                                  fit: BoxFit.cover,
+                                )
+                              : const Icon(Icons.movie),
+                        ),
                         title: Text(movie.title),
                         subtitle: Text("⭐ ${movie.rating}"),
                       );
