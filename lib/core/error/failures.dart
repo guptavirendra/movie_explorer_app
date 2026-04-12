@@ -4,13 +4,16 @@ abstract class Failure {
 }
 
 class ServerFailure extends Failure {
-  ServerFailure(super.message);
+  ServerFailure()
+    : super("An error occurred while fetching data from the server.");
 }
 
 class CacheFailure extends Failure {
-  CacheFailure(super.message);
+  CacheFailure()
+    : super("An error occurred while fetching data from the cache.");
 }
 
 class NetworkFailure extends Failure {
-  NetworkFailure(super.message);
+  NetworkFailure()
+    : super("An error occurred while fetching data from the network.");
 }

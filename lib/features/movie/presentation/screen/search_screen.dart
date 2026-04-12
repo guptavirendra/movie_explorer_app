@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -80,12 +81,14 @@ class _SearchScreenState extends State<SearchScreen> {
 
                       return ListTile(
                         leading: movie.posterPath.isNotEmpty
-                            ? Image.network(
-                                "https://image.tmdb.org/t/p/w200${movie.posterPath}",
-                                width: 50,
-                                fit: BoxFit.cover,
-                                errorBuilder: (_, __, ___) =>
-                                    const Icon(Icons.movie),
+                            ? CachedNetworkImage(
+                                imageUrl:
+                                    "https://image.tmdb.org/t/p/w200${movie.posterPath}",
+                                placeholder: (_, __) => const Center(
+                                  child: CircularProgressIndicator(),
+                                ),
+                                errorWidget: (_, __, ___) =>
+                                    const Icon(Icons.broken_image),
                               )
                             : const Icon(Icons.movie),
                         title: Text(movie.title),

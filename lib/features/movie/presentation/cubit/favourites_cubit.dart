@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movie_explorer_app/core/error/failures.dart';
 import 'package:movie_explorer_app/core/util/usecase.dart';
 import 'package:movie_explorer_app/features/movie/domain/entities/movie.dart';
 import 'package:movie_explorer_app/features/movie/domain/usecases/get_favourite.dart';
@@ -21,7 +22,13 @@ class FavouritesCubit extends Cubit<FavouritesState> {
         emit(FavouritesLoaded(movies: movies));
       }
     } catch (e) {
-      emit(FavouritesError(message: e.toString()));
+      if (e is Failure) {
+        emit(FavouritesError(message: e.message));
+      } else {
+        emit(FavouritesError(message: e.toString()));
+      }
+
+      ///   emit(FavouritesError(message: e.toString()));
     }
   }
 

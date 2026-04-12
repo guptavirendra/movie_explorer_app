@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_explorer_app/features/movie/domain/usecases/params.dart';
@@ -35,11 +36,13 @@ class MovieDetailsScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Backdrop Image
-                    Image.network(
-                      "https://image.tmdb.org/t/p/w500${movie.posterPath}",
-                      width: double.infinity,
-                      height: 250,
-                      fit: BoxFit.cover,
+                    CachedNetworkImage(
+                      imageUrl:
+                          "https://image.tmdb.org/t/p/w200${movie.posterPath}",
+                      placeholder: (_, __) =>
+                          const Center(child: CircularProgressIndicator()),
+                      errorWidget: (_, __, ___) =>
+                          const Icon(Icons.broken_image),
                     ),
 
                     const SizedBox(height: 12),

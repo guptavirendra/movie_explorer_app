@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_explorer_app/features/movie/presentation/cubit/favourites_cubit.dart';
@@ -34,10 +35,13 @@ class FavouriteScreen extends StatelessWidget {
                   final movie = state.movies[index];
 
                   return ListTile(
-                    leading: Image.network(
-                      "https://image.tmdb.org/t/p/w200${movie.posterPath}",
-                      width: 50,
-                      fit: BoxFit.cover,
+                    leading: CachedNetworkImage(
+                      imageUrl:
+                          "https://image.tmdb.org/t/p/w200${movie.posterPath}",
+                      placeholder: (_, __) =>
+                          const Center(child: CircularProgressIndicator()),
+                      errorWidget: (_, __, ___) =>
+                          const Icon(Icons.broken_image),
                     ),
                     title: Text(movie.title),
                     subtitle: Text("⭐ ${movie.rating}"),

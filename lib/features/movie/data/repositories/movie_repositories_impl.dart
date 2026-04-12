@@ -1,3 +1,7 @@
+import 'package:dio/dio.dart';
+import 'package:flutter/rendering.dart';
+import 'package:movie_explorer_app/core/error/failures.dart';
+import 'package:movie_explorer_app/core/network/network_info.dart';
 import 'package:movie_explorer_app/features/movie/data/datasources/movie_local_datasource.dart';
 import 'package:movie_explorer_app/features/movie/data/datasources/movie_remote_data_source.dart';
 import 'package:movie_explorer_app/features/movie/data/models/movie_model.dart';
@@ -8,23 +12,48 @@ import 'package:movie_explorer_app/features/movie/domain/repositories/movie_repo
 class MovieRepositoriesImpl implements MovieRepository {
   final MovieRemoteDataSource remoteDataSource;
   final MovieLocalDatasource localDataSource;
-  MovieRepositoriesImpl(this.remoteDataSource, this.localDataSource);
+  final NetworkInfo networkInfo;
+  MovieRepositoriesImpl(
+    this.remoteDataSource,
+    this.localDataSource,
+    this.networkInfo,
+  );
 
   @override
   Future<MovieResponse> getPopularMovies(int page) async {
-    final data = await remoteDataSource.getPopularMovies(page);
+    debugPrint("MovieRepositoriesImpl: getPopularMovies called with page: $page"); // ✅ debug log
+    if (!await networkInfo.isConnected) {
+      debugPrint("No internet connection detected."); // ✅ debug log
+      throw NetworkFailure(); // ✅ clean error for no internet
+    }
+    try {
+      debugPrint("Fetching popular movies from remote data source..."); // ✅ debug log
+      final data = await remoteDataSource.getPopularMovies(page);
 
-    final movies = (data['results'] as List)
-        .map((e) => MovieModel.fromJson(e).toEntity())
-        .toList();
+      final movies = (data['results'] as List)
+          .map((e) => MovieModel.fromJson(e).toEntity())
+          .toList();
 
-    return MovieResponse(movies: movies, totalPages: data['totalPages']);
+      return MovieResponse(movies: movies, totalPages: data['totalPages']);
+    } on DioException catch (_) {
+      debugPrint("DioException caught while fetching popular movies."); // ✅ debug log
+      throw ServerFailure(); // ✅ clean error
+    }
   }
 
   @override
   Future<Movie> getMovieDetails(int movieId) async {
-    final result = await remoteDataSource.getMovieDetails(movieId);
-    return result.toEntity();
+    try {
+      final result = await remoteDataSource.getMovieDetails(movieId);
+      return result.toEntity();
+    } on DioException catch (e) {
+      if (e.type == DioExceptionType.connectionError ||
+          e.type == DioExceptionType.unknown) {
+        throw NetworkFailure(); // ✅ clean error
+      } else {
+        throw ServerFailure(); // ✅ clean error
+      }
+    }
   }
 
   @override
@@ -38,7 +67,8 @@ class MovieRepositoriesImpl implements MovieRepository {
       //rating: movie.rating,
       voteAverage: 1.0, // Placeholder, replace with actual rating if available
       releaseDate: movie.releaseDate,
-      voteCount: 1, rating: 1.0,
+      voteCount: 1,
+      rating: 1.0,
     );
 
     await localDataSource.toggleFavorite(model);
@@ -52,7 +82,16 @@ class MovieRepositoriesImpl implements MovieRepository {
 
   @override
   Future<List<Movie>> searchMovies(String query, int page) async {
-    final result = await remoteDataSource.searchMovies(query, page);
-    return result.map((e) => e.toEntity()).toList();
+    try {
+      final result = await remoteDataSource.searchMovies(query, page);
+      return result.map((e) => e.toEntity()).toList();
+    } on DioException catch (e) {
+      if (e.type == DioExceptionType.connectionError ||
+          e.type == DioExceptionType.unknown) {
+        throw NetworkFailure(); // ✅ clean error
+      } else {
+        throw ServerFailure(); // ✅ clean error
+      }
+    }
   }
 }

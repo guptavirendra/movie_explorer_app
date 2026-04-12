@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_explorer_app/core/routes/app_routes.dart';
@@ -16,17 +19,45 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final _scrollController = ScrollController();
+  late StreamSubscription connectivitySub;
+
+  bool hasInternet = true;
+
   @override
   void initState() {
     super.initState();
-    context.read<MovieBloc>().add(FetchPopularMovies());
 
-    _scrollController.addListener(() {
-      if (_scrollController.position.pixels >=
-          _scrollController.position.maxScrollExtent - 200) {
-        context.read<MovieBloc>().add(LoadMoreMovies());
+    connectivitySub = Connectivity().onConnectivityChanged.listen((result) {
+      final isNowConnected = !result.contains(ConnectivityResult.none);
+
+      // 🔥 only trigger when connection changes from OFF → ON
+      if (!hasInternet && isNowConnected) {
+        if (mounted) {
+          final state = context.read<MovieBloc>().state;
+          if (state is MovieError) {
+            context.read<MovieBloc>().add(FetchPopularMovies());
+          }
+        }
       }
+
+      hasInternet = isNowConnected;
     });
+
+    _scrollController.addListener(_onScroll);
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 200) {
+      context.read<MovieBloc>().add(LoadMoreMovies());
+    }
+  }
+
+  @override
+  void dispose() {
+    connectivitySub.cancel();
+    _scrollController.dispose();
+    super.dispose();
   }
 
   Future<void> _onRefresh() async {
@@ -62,7 +93,26 @@ class _HomeScreenState extends State<HomeScreen> {
             }
 
             if (state is MovieError) {
-              return Center(child: Text(state.message));
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(Icons.wifi_off, size: 60),
+                    const SizedBox(height: 12),
+                    Text(state.message),
+                    const SizedBox(height: 12),
+                    ElevatedButton(
+                      onPressed: () {
+                        final bloc = context.read<MovieBloc>();
+                        debugPrint("Retrying clicked..."); // ✅ debug log
+                        //bloc.emit(MovieInitial()); // ✅ force state reset
+                        bloc.add(FetchPopularMovies());
+                      },
+                      child: const Text("Retry"),
+                    ),
+                  ],
+                ),
+              );
             }
 
             if (state is MovieLoaded) {

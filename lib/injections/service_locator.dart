@@ -53,7 +53,7 @@ Future<void> init(Box<dynamic> box) async {
   // Repository
   // ----------------------------
   singleton.registerLazySingleton<MovieRepository>(
-    () => MovieRepositoriesImpl(singleton(), singleton()),
+    () => MovieRepositoriesImpl(singleton(), singleton(), singleton()),
   );
 
   // ----------------------------
@@ -62,8 +62,7 @@ Future<void> init(Box<dynamic> box) async {
   singleton.registerLazySingleton(() => GetPopularMovies(singleton()));
   singleton.registerLazySingleton(() => GetMovieDetails(singleton()));
   singleton.registerLazySingleton(() => SearchMovies(singleton()));
-  // singleton.registerLazySingleton(() => ToggleFavorite(singleton()));
-  // singleton.registerLazySingleton(() => GetFavorites(singleton()));
+  
 
   // ----------------------------
   // Bloc (Factory ❗)

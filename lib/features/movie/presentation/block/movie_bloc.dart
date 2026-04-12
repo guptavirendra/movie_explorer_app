@@ -1,4 +1,6 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movie_explorer_app/core/error/failures.dart';
 import 'package:movie_explorer_app/features/movie/domain/usecases/params.dart';
 
 import '../../domain/usecases/get_popular_movies.dart';
@@ -22,11 +24,13 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
     FetchPopularMovies event,
     Emitter<MovieState> emit,
   ) async {
+    page = PageParams(page: 1);
     emit(MovieLoading());
+    debugPrint(
+      "Fetching popular movies for page ${page.page}...",
+    ); // ✅ debug log
 
     try {
-      page = PageParams(page: 1);
-
       final response = await getPopularMovies(page);
 
       totalPages = response.totalPages;
@@ -38,7 +42,12 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
         ),
       );
     } catch (e) {
-      emit(MovieError(e.toString(), message: 'Failed to fetch movies'));
+      debugPrint("Error fetching movies: $e"); // ✅ debug log
+      if (e is Failure) {
+        emit(MovieError(e.message, message: 'Failed to fetch movies'));
+      } else {
+        emit(MovieError(e.toString(), message: 'Failed to fetch movies'));
+      }
     }
   }
 

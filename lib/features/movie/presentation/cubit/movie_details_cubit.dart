@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movie_explorer_app/core/error/failures.dart';
 import 'package:movie_explorer_app/core/util/usecase.dart';
 import 'package:movie_explorer_app/features/movie/domain/entities/movie.dart';
 import 'package:movie_explorer_app/features/movie/domain/usecases/get_favourite.dart';
@@ -29,18 +30,20 @@ class MovieDetailsCubit extends Cubit<MovieDetailsState> {
 
       emit(MovieDetailsLoaded(movie));
     } catch (e) {
-      emit(MovieDetailsError(e.toString()));
+      if (e is Failure) {
+        emit(MovieDetailsError(e.message));
+      } else {
+        emit(MovieDetailsError(e.toString()));
+      }
+
+      ///  emit(MovieDetailsError(e.toString()));
     }
   }
 
   Future<void> toggleFav(Movie movie) async {
-    print("Toggle called for: ${movie.title}");
-
     await toggleFavorite(movie);
 
     isFavorite = !isFavorite;
-
-    print("isFavorite now: $isFavorite");
 
     emit(MovieDetailsLoaded(movie)); // 🔥 VERY IMPORTANT
   }

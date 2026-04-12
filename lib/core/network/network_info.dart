@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:connectivity_plus/connectivity_plus.dart';
 
 class NetworkInfo {
@@ -6,7 +8,17 @@ class NetworkInfo {
   NetworkInfo(this.connectivity);
 
   Future<bool> get isConnected async {
-    var connectivityResult = await connectivity.checkConnectivity();
-    return !connectivityResult.contains(ConnectivityResult.none);
+    final connectivityResult = await connectivity.checkConnectivity();
+
+    final hasNetwork = !connectivityResult.contains(ConnectivityResult.none);
+
+    //if (!hasNetwork) return false;
+
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      return result.isNotEmpty;
+    } catch (_) {
+      return false;
+    }
   }
 }
