@@ -1,9 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:movie_explorer_app/core/util/usecase.dart';
 import 'package:movie_explorer_app/features/movie/data/models/movie_model.dart';
 import 'package:movie_explorer_app/features/movie/domain/repositories/movie_repository.dart';
-import 'package:movie_explorer_app/features/movie/domain/usecases/toggle_favourite.dart';
 import 'package:movie_explorer_app/features/movie/domain/usecases/get_favourite.dart';
+import 'package:movie_explorer_app/features/movie/domain/usecases/toggle_favourite.dart';
 
 // 🎯 Mock the MovieRepository
 class MockMovieRepository extends Mock implements MovieRepository {}
@@ -48,7 +49,8 @@ void main() {
       await toggleFavourite(tMovieModel.toEntity());
 
       // ✔️ Assert: Verify repository was called
-      verify(() => mockMovieRepository.toggleFavorite(tMovieModel.toEntity())).called(1);
+      verify(() => mockMovieRepository.toggleFavorite(tMovieModel.toEntity()))
+          .called(1);
     },
   );
 
@@ -74,8 +76,10 @@ void main() {
       await toggleFavourite(differentMovie);
 
       // ✔️ Assert: Verify correct movie was toggled
-      verify(() => mockMovieRepository.toggleFavorite(differentMovie)).called(1);
-      verifyNever(() => mockMovieRepository.toggleFavorite(tMovieModel.toEntity()));
+      verify(() => mockMovieRepository.toggleFavorite(differentMovie))
+          .called(1);
+      verifyNever(
+          () => mockMovieRepository.toggleFavorite(tMovieModel.toEntity()));
     },
   );
 
@@ -94,7 +98,8 @@ void main() {
       await toggleFavourite(tMovieModel.toEntity());
 
       // ✔️ Assert: Verify all three calls were made
-      verify(() => mockMovieRepository.toggleFavorite(tMovieModel.toEntity())).called(3);
+      verify(() => mockMovieRepository.toggleFavorite(tMovieModel.toEntity()))
+          .called(3);
     },
   );
 

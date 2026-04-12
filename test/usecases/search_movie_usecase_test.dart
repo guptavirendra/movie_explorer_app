@@ -109,7 +109,8 @@ void main() {
 
       // ✔️ Assert: Verify special characters are handled
       expect(result, tSearchResults);
-      verify(() => mockMovieRepository.searchMovies("Harry & Potter", 1)).called(1);
+      verify(() => mockMovieRepository.searchMovies("Harry & Potter", 1))
+          .called(1);
     },
   );
 

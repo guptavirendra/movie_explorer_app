@@ -65,7 +65,8 @@ void main() {
     'GetPopularMovies should call repository with correct page parameter',
     () async {
       // 🔧 Arrange: Setup mock for page 2
-      final tMovieResponse = MovieResponse(movies: [tMovieModel.toEntity()], totalPages: 10);
+      final tMovieResponse =
+          MovieResponse(movies: [tMovieModel.toEntity()], totalPages: 10);
       when(() => mockMovieRepository.getPopularMovies(2))
           .thenAnswer((_) async => tMovieResponse);
 
