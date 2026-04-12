@@ -35,13 +35,24 @@ class FavouriteScreen extends StatelessWidget {
                   final movie = state.movies[index];
 
                   return ListTile(
-                    leading: CachedNetworkImage(
-                      imageUrl:
-                          "https://image.tmdb.org/t/p/w200${movie.posterPath}",
-                      placeholder: (_, __) =>
-                          const Center(child: CircularProgressIndicator()),
-                      errorWidget: (_, __, ___) =>
-                          const Icon(Icons.broken_image),
+                    leading: SizedBox(
+                      width: 56,
+                      height: 56,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: CachedNetworkImage(
+                          imageUrl:
+                              "https://image.tmdb.org/t/p/w200${movie.posterPath}",
+                          fit: BoxFit.cover,
+                          placeholder: (_, __) => const Center(
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          ),
+                          errorWidget: (_, __, ___) => const Icon(
+                            Icons.broken_image,
+                            size: 32,
+                          ),
+                        ),
+                      ),
                     ),
                     title: Text(movie.title),
                     subtitle: Text("⭐ ${movie.rating}"),
@@ -63,5 +74,3 @@ class FavouriteScreen extends StatelessWidget {
     );
   }
 }
-
-class FavoritesCubit {}
