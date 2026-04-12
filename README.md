@@ -16,20 +16,28 @@ A Flutter application that displays popular movies, movie details, search functi
 
 ## Screenshots
 
-Add app screenshots to the `screenshots/` folder and reference them here. Example naming:
-- `screenshots/home.png`
-- `screenshots/search.png`
-- `screenshots/details.png`
-- `screenshots/favorites.png`
-
-Then include them in this README using Markdown:
-
-```md
-![Home screen](screenshots/home.png)
-![Search screen](screenshots/search.png)
-![Details screen](screenshots/details.png)
-![Favorites screen](screenshots/favorites.png)
-```
+<table>
+  <tr>
+    <td align="center">
+      <img src="screenshots/home.png" alt="Home screen" width="320" />
+      <p><strong>Home</strong></p>
+    </td>
+    <td align="center">
+      <img src="screenshots/search.png" alt="Search screen" width="320" />
+      <p><strong>Search</strong></p>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="screenshots/details.png" alt="Details screen" width="320" />
+      <p><strong>Details</strong></p>
+    </td>
+    <td align="center">
+      <img src="screenshots/favourites.png" alt="Favorites screen" width="320" />
+      <p><strong>Favorites</strong></p>
+    </td>
+  </tr>
+</table>
 
 > Tip: capture the app in a device or simulator, save the images to `screenshots/`, and update the file names here.
 
