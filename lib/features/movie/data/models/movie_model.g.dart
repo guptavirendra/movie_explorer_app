@@ -8,7 +8,7 @@ part of 'movie_model.dart';
 
 class MovieModelAdapter extends TypeAdapter<MovieModel> {
   @override
-  final int typeId = 0;
+  final int typeId = 1;
 
   @override
   MovieModel read(BinaryReader reader) {
@@ -29,7 +29,7 @@ class MovieModelAdapter extends TypeAdapter<MovieModel> {
   @override
   void write(BinaryWriter writer, MovieModel obj) {
     writer
-      ..writeByte(7)
+      ..writeByte(6)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)

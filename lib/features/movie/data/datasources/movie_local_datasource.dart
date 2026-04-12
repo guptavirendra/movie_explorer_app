@@ -1,4 +1,5 @@
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:movie_explorer_app/core/cache/hive_service.dart';
 import 'package:movie_explorer_app/features/movie/data/models/movie_model.dart';
 
 abstract class MovieLocalDatasource {
@@ -7,21 +8,20 @@ abstract class MovieLocalDatasource {
 }
 
 class MovieLocalDatasourceImpl implements MovieLocalDatasource {
-  final Box box;
-  MovieLocalDatasourceImpl(this.box);
+  final HiveService hiveService;
+
+  MovieLocalDatasourceImpl(this.hiveService);
+  Box<MovieModel> get box => hiveService.favoritesBoxInstance;
 
   @override
   Future<void> toggleFavorite(MovieModel movie) async {
     if (box.containsKey(movie.id)) {
       await box.delete(movie.id);
-      print("❌ Removed from favorites: ${movie.title}");
     } else {
       await box.put(movie.id, movie);
-      print("✅ Added to favorites: ${movie.title}");
     }
-
-    print("📦 Total favorites: ${box.length}");
   }
+
   @override
   Future<List<MovieModel>> getFavorites() async {
     return box.values.cast<MovieModel>().toList();

@@ -3,7 +3,7 @@ import 'package:movie_explorer_app/features/movie/domain/entities/movie.dart';
 
 part 'movie_model.g.dart'; // 🔥 IMPORTANT
 
-@HiveType(typeId: 0)
+@HiveType(typeId: 1)
 class MovieModel {
   @HiveField(0)
   final int id;
@@ -18,7 +18,7 @@ class MovieModel {
   final String posterPath;
 
   @HiveField(4)
-  final double? rating;
+  final double rating;
 
   @HiveField(5)
   final String releaseDate;
@@ -48,7 +48,7 @@ class MovieModel {
       title: title,
       overview: overview,
       posterPath: posterPath,
-      rating: rating ?? 0.0,
+      rating: rating,
       releaseDate: releaseDate,
     );
   }

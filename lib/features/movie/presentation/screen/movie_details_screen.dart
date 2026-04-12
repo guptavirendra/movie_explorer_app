@@ -85,8 +85,6 @@ class MovieDetailsScreen extends StatelessWidget {
                                       color: Colors.red,
                                     ),
                                     onPressed: () {
-                                      print("❤️ Clicked"); // 👈 ADD THIS
-
                                       cubit.toggleFav(movie);
                                     },
                                   ),
