@@ -7,11 +7,12 @@ class DioClient {
   DioClient(this.dio) {
     dio.options = BaseOptions(
       baseUrl: Env.apiBaseUrl,
-      connectTimeout: const Duration(seconds: 60),
-      receiveTimeout: const Duration(seconds: 60),
+      connectTimeout: const Duration(seconds: 10),
+      receiveTimeout: const Duration(seconds: 10),
     );
 
     dio.interceptors.add(LogInterceptor(requestBody: true, responseBody: true));
     dio.interceptors.add(ApiKeyInterceptor());
+    dio.interceptors.add(RetryInterceptor(dio));
   }
 }

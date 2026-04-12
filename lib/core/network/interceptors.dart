@@ -60,3 +60,52 @@ class ApiKeyInterceptor extends Interceptor {
     super.onResponse(response, handler);
   }
 }
+
+class RetryInterceptor extends Interceptor {
+  final Dio dio;
+  final int maxRetries;
+
+  RetryInterceptor(this.dio, {this.maxRetries = 3});
+
+  @override
+  void onError(DioException err, ErrorInterceptorHandler handler) async {
+    final requestOptions = err.requestOptions;
+
+    // ❌ Do not retry for these
+    if (_shouldNotRetry(err)) {
+      return handler.next(err);
+    }
+
+    int retryCount = requestOptions.extra['retryCount'] ?? 0;
+
+    if (retryCount < maxRetries) {
+      retryCount++;
+
+      requestOptions.extra['retryCount'] = retryCount;
+
+      // exponential backoff
+      await Future.delayed(Duration(seconds: 1 << retryCount));
+
+      try {
+        final response = await dio.fetch(requestOptions);
+        return handler.resolve(response);
+      } catch (e) {
+        return handler.next(e as DioException);
+      }
+    }
+
+    return handler.next(err);
+  }
+
+  bool _shouldNotRetry(DioException err) {
+    final statusCode = err.response?.statusCode ?? 0;
+
+    // ❌ don't retry client errors
+    if (statusCode >= 400 && statusCode < 500) return true;
+
+    // ❌ don't retry cancel
+    if (err.type == DioExceptionType.cancel) return true;
+
+    return false;
+  }
+}
