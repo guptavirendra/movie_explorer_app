@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_explorer_app/features/movie/domain/usecases/params.dart';
 import 'package:movie_explorer_app/features/movie/presentation/block/movie_bloc.dart';
 import 'package:movie_explorer_app/features/movie/presentation/block/movie_event.dart';
-import 'package:movie_explorer_app/features/movie/presentation/cubit/movie_details_cubit.dart';
 import 'package:movie_explorer_app/features/movie/presentation/cubit/search_cubit.dart';
 import 'package:movie_explorer_app/features/movie/presentation/screen/favourite_screen.dart';
 import 'package:movie_explorer_app/features/movie/presentation/screen/home_screen.dart';
@@ -36,11 +35,8 @@ class AppRoutes {
       case details:
         final params = settings.arguments as MovieDetailsParams;
         return MaterialPageRoute(
-          builder: (_) => BlocProvider(
-            create: (_) => singleton<MovieDetailsCubit>(),
-            child: MovieDetailsScreen(
-              movieDetailsParams: MovieDetailsParams(params.movieId),
-            ),
+          builder: (_) => MovieDetailsScreen(
+            movieDetailsParams: MovieDetailsParams(params.movieId),
           ),
         );
       case favourites:
