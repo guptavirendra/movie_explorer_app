@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_explorer_app/core/routes/navigation_service.dart';
 import 'package:movie_explorer_app/features/movie/presentation/block/movie_bloc.dart';
@@ -23,6 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late StreamSubscription connectivitySub;
 
   bool hasInternet = true;
+  bool _loadMoreTriggered = false;
 
   @override
   void initState() {
@@ -49,8 +51,20 @@ class _HomeScreenState extends State<HomeScreen> {
   void _onScroll() {
     if (!_scrollController.hasClients) return;
 
-    if (_scrollController.position.extentAfter < 300) {
+    if (_scrollController.position.userScrollDirection !=
+        ScrollDirection.reverse) {
+      return;
+    }
+
+    final isNearBottom = _scrollController.position.extentAfter < 300;
+
+    if (isNearBottom && !_loadMoreTriggered) {
+      _loadMoreTriggered = true;
       context.read<MovieBloc>().add(LoadMoreMovies());
+    }
+
+    if (!isNearBottom) {
+      _loadMoreTriggered = false;
     }
   }
 
@@ -121,6 +135,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   Expanded(
                     child: GridView.builder(
                       controller: _scrollController,
+                      cacheExtent: 300,
                       itemCount: state.movies.length,
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(

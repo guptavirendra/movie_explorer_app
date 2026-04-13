@@ -24,8 +24,8 @@ class MovieCard extends StatelessWidget {
                   imageUrl:
                       "https://image.tmdb.org/t/p/w200${movie.posterPath}",
                   fit: BoxFit.cover,
-                  placeholder: (_, __) => const Center(
-                    child: CircularProgressIndicator(strokeWidth: 2),
+                  placeholder: (_, __) => const ColoredBox(
+                    color: Color(0xFFEAEAEA),
                   ),
                   errorWidget: (_, __, ___) => const Icon(Icons.broken_image),
                 ),

@@ -23,7 +23,7 @@ class SearchCubit extends Cubit<SearchState> {
   void onQueryChanged(String query) {
     if (_debounce?.isActive ?? false) _debounce!.cancel();
 
-    _debounce = Timer(const Duration(milliseconds: 500), () async {
+    _debounce = Timer(const Duration(milliseconds: 300), () async {
       if (query.isEmpty) {
         emit(SearchInitial());
         return;

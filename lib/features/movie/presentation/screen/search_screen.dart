@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_explorer_app/core/routes/navigation_service.dart';
 
@@ -17,21 +18,28 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   final ScrollController _scrollController = ScrollController();
-  final FocusNode _searchFocusNode = FocusNode();
+  bool _loadMoreTriggered = false;
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) {
-        _searchFocusNode.requestFocus();
-      }
-    });
     _scrollController.addListener(() {
       if (!_scrollController.hasClients) return;
 
-      if (_scrollController.position.extentAfter < 300) {
+      if (_scrollController.position.userScrollDirection !=
+          ScrollDirection.reverse) {
+        return;
+      }
+
+      final isNearBottom = _scrollController.position.extentAfter < 300;
+
+      if (isNearBottom && !_loadMoreTriggered) {
+        _loadMoreTriggered = true;
         context.read<SearchCubit>().loadMore();
+      }
+
+      if (!isNearBottom) {
+        _loadMoreTriggered = false;
       }
     });
   }
@@ -39,7 +47,6 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   void dispose() {
     _scrollController.dispose();
-    _searchFocusNode.dispose();
     super.dispose();
   }
 
@@ -53,8 +60,6 @@ class _SearchScreenState extends State<SearchScreen> {
           Padding(
             padding: const EdgeInsets.all(12),
             child: TextField(
-              focusNode: _searchFocusNode,
-              autofocus: true,
               decoration: const InputDecoration(
                 hintText: "Search movies...",
                 border: OutlineInputBorder(),

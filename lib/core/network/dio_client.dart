@@ -15,13 +15,17 @@ class DioClient {
     if (kDebugMode) {
       dio.interceptors.add(
         LogInterceptor(
-          requestBody: false,
-          responseBody: false,
+          request: true,
           requestHeader: false,
+          requestBody: false,
           responseHeader: false,
+          responseBody: false,
+          error: true,
+          logPrint: (obj) => debugPrint('[DIO] $obj'),
         ),
       );
     }
+
     dio.interceptors.add(ApiKeyInterceptor());
     dio.interceptors.add(RetryInterceptor(dio));
   }
