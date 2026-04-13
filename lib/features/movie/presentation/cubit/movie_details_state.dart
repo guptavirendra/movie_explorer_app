@@ -14,10 +14,12 @@ class MovieDetailsLoading extends MovieDetailsState {}
 
 class MovieDetailsLoaded extends MovieDetailsState {
   final Movie movie;
-  const MovieDetailsLoaded(this.movie);
+  final bool isFavorite;
+
+  const MovieDetailsLoaded(this.movie, {required this.isFavorite});
 
   @override
-  List<Object?> get props => [movie];
+  List<Object?> get props => [movie, isFavorite];
 }
 
 class MovieDetailsError extends MovieDetailsState {

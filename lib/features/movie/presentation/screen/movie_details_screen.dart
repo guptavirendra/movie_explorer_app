@@ -57,41 +57,32 @@ class MovieDetailsScreen extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          /// 🔥 TITLE + FAVORITE BUTTON
-                          BlocBuilder<MovieDetailsCubit, MovieDetailsState>(
-                            builder: (context, state) {
-                              final cubit = context.read<MovieDetailsCubit>();
-
-                              return Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  /// Title
-                                  Expanded(
-                                    child: Text(
-                                      movie.title,
-                                      style: const TextStyle(
-                                        fontSize: 22,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  movie.title,
+                                  style: const TextStyle(
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.bold,
                                   ),
-
-                                  /// ❤️ Favorite Button
-                                  IconButton(
-                                    icon: Icon(
-                                      cubit.isFavorite
-                                          ? Icons.favorite
-                                          : Icons.favorite_border,
-                                      color: Colors.red,
-                                    ),
-                                    onPressed: () {
-                                      cubit.toggleFav(movie);
-                                    },
-                                  ),
-                                ],
-                              );
-                            },
+                                ),
+                              ),
+                              IconButton(
+                                icon: Icon(
+                                  state.isFavorite
+                                      ? Icons.favorite
+                                      : Icons.favorite_border,
+                                  color: Colors.red,
+                                ),
+                                onPressed: () {
+                                  context
+                                      .read<MovieDetailsCubit>()
+                                      .toggleFav(movie);
+                                },
+                              ),
+                            ],
                           ),
 
                           const SizedBox(height: 8),

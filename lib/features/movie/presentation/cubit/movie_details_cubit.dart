@@ -19,38 +19,35 @@ class MovieDetailsCubit extends Cubit<MovieDetailsState> {
     this.getFavorites,
   ) : super(MovieDetailsInitial());
 
-  bool isFavorite = false;
-
   Future<void> fetchMovieDetails(MovieDetailsParams params) async {
     emit(MovieDetailsLoading());
 
     try {
       final movie = await getMovieDetails(params);
-      await _checkIfFavorite(movie); // ✅ correct
+      final isFavorite = await _checkIfFavorite(movie);
 
-      emit(MovieDetailsLoaded(movie));
+      emit(MovieDetailsLoaded(movie, isFavorite: isFavorite));
     } catch (e) {
       if (e is Failure) {
         emit(MovieDetailsError(e.message));
       } else {
         emit(MovieDetailsError(e.toString()));
       }
-
-      ///  emit(MovieDetailsError(e.toString()));
     }
   }
 
   Future<void> toggleFav(Movie movie) async {
     await toggleFavorite(movie);
+    final currentState = state;
+    final nextIsFavorite =
+        currentState is MovieDetailsLoaded ? !currentState.isFavorite : false;
 
-    isFavorite = !isFavorite;
-
-    emit(MovieDetailsLoaded(movie)); // 🔥 VERY IMPORTANT
+    emit(MovieDetailsLoaded(movie, isFavorite: nextIsFavorite));
   }
 
-  Future<void> _checkIfFavorite(Movie movie) async {
+  Future<bool> _checkIfFavorite(Movie movie) async {
     final favorites = await getFavorites(NoParams());
 
-    isFavorite = favorites.any((m) => m.id == movie.id);
+    return favorites.any((m) => m.id == movie.id);
   }
 }
