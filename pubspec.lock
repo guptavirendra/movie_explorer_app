@@ -42,7 +42,7 @@ packages:
     source: hosted
     version: "7.2.1"
   bloc_test:
-    dependency: "direct main"
+    dependency: "direct dev"
     description:
       name: bloc_test
       sha256: "94983995519fdfd5ce486ab65dd6e11d14359336817d95050cf1ff26d2d726b5"
