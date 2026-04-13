@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/rendering.dart';
 import 'package:movie_explorer_app/core/error/failures.dart';
 import 'package:movie_explorer_app/core/network/network_info.dart';
@@ -42,13 +41,11 @@ class MovieRepositoriesImpl implements MovieRepository {
     try {
       final result = await remoteDataSource.getMovieDetails(movieId);
       return result.toEntity();
-    } on DioException catch (e) {
-      if (e.type == DioExceptionType.connectionError ||
-          e.type == DioExceptionType.unknown) {
-        throw NetworkFailure(); // ✅ clean error
-      } else {
-        throw ServerFailure(); // ✅ clean error
+    } on ServerException catch (e) {
+      if (e.statusCode == 0) {
+        throw NetworkFailure();
       }
+      throw ServerFailure();
     }
   }
 
@@ -59,6 +56,7 @@ class MovieRepositoriesImpl implements MovieRepository {
       title: movie.title,
       overview: movie.overview,
       posterPath: movie.posterPath,
+      backdropPath: movie.backdropPath,
       rating: movie.rating,
       releaseDate: movie.releaseDate,
     );
@@ -77,13 +75,11 @@ class MovieRepositoriesImpl implements MovieRepository {
     try {
       final result = await remoteDataSource.searchMovies(query, page);
       return result.map((e) => e.toEntity()).toList();
-    } on DioException catch (e) {
-      if (e.type == DioExceptionType.connectionError ||
-          e.type == DioExceptionType.unknown) {
-        throw NetworkFailure(); // ✅ clean error
-      } else {
-        throw ServerFailure(); // ✅ clean error
+    } on ServerException catch (e) {
+      if (e.statusCode == 0) {
+        throw NetworkFailure();
       }
+      throw ServerFailure();
     }
   }
 }
