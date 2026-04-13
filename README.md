@@ -5,6 +5,7 @@ A Flutter application that displays popular movies, movie details, search functi
 ## Features
 
 - 🎬 **Popular Movies Display**: Grid view of popular movies with posters, titles, and ratings
+- 🏠 **Home Screen UX**: Centered app bar title with quick actions for Search and Favorites
 - 📱 **Movie Details**: Full movie information including overview, rating, release date, and poster/backdrop
 - 🔍 **Search Functionality**: Search movies by keyword with debounce and infinite scroll
 - ❤️ **Offline Favorites**: Save favorite movies locally using Hive database

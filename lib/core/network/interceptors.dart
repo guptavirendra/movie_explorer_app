@@ -21,9 +21,8 @@ class ApiKeyInterceptor extends Interceptor {
         ),
       );
     } else {
-      handler.next(err); // Pass other errors to the next interceptor
+      handler.next(err);
     }
-    super.onError(err, handler);
   }
 
   @override
@@ -35,8 +34,10 @@ class ApiKeyInterceptor extends Interceptor {
     if (statusCode >= 200 && statusCode < 300) {
       return handler.next(response);
     } else if (statusCode >= 400 && statusCode < 500) {
-      // You can customize this error handling as needed
-      final errorMessage = response.data['status_message'] ?? 'Unknown error';
+      final responseData = response.data;
+      final errorMessage = responseData is Map<String, dynamic>
+          ? (responseData['status_message'] ?? 'Unknown error') as String
+          : 'Unknown error';
       handler.reject(
         DioException(
           requestOptions: response.requestOptions,
@@ -45,7 +46,7 @@ class ApiKeyInterceptor extends Interceptor {
           error: errorMessage,
         ),
       );
-      return; // Exit early since we're rejecting the response
+      return;
     } else if (statusCode >= 500) {
       handler.reject(
         DioException(
@@ -55,9 +56,9 @@ class ApiKeyInterceptor extends Interceptor {
           error: 'Server error, please try again later.',
         ),
       );
-      return; // Exit early since we're rejecting the response
+      return;
     }
-    super.onResponse(response, handler);
+    handler.next(response);
   }
 }
 

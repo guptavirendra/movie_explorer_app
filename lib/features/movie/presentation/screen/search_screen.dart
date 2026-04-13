@@ -28,8 +28,9 @@ class _SearchScreenState extends State<SearchScreen> {
       }
     });
     _scrollController.addListener(() {
-      if (_scrollController.position.pixels >=
-          _scrollController.position.maxScrollExtent - 200) {
+      if (!_scrollController.hasClients) return;
+
+      if (_scrollController.position.extentAfter < 300) {
         context.read<SearchCubit>().loadMore();
       }
     });

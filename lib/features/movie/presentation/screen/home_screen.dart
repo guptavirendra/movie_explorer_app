@@ -47,8 +47,9 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 200) {
+    if (!_scrollController.hasClients) return;
+
+    if (_scrollController.position.extentAfter < 300) {
       context.read<MovieBloc>().add(LoadMoreMovies());
     }
   }
@@ -68,6 +69,8 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
+        centerTitle: true,
         title: const Text("Movies"),
         actions: [
           IconButton(
