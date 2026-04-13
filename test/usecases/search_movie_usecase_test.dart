@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:movie_explorer_app/features/movie/data/models/movie_model.dart';
 import 'package:movie_explorer_app/features/movie/domain/repositories/movie_repository.dart';
+import 'package:movie_explorer_app/features/movie/domain/usecases/params.dart';
 import 'package:movie_explorer_app/features/movie/domain/usecases/search_movie.dart';
 
 // 🎯 Mock the MovieRepository

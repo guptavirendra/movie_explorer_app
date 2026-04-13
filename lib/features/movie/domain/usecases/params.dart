@@ -10,9 +10,9 @@ class MovieDetailsParams {
   MovieDetailsParams(this.movieId);
 }
 
-class SearchMoviesParams {
+class SearchParams {
   final String query;
   final int page;
 
-  SearchMoviesParams(this.query, this.page);
+  SearchParams({required this.query, required this.page});
 }
