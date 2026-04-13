@@ -76,22 +76,13 @@ class MovieDetailsScreen extends StatelessWidget {
                             ),
                           ],
                         ),
-
                         const SizedBox(height: 8),
-
-                        /// Rating
                         Text(
                           "⭐ ${movie.rating}",
-                        ), // Placeholder, replace with actual rating if available
-
+                        ),
                         const SizedBox(height: 8),
-
-                        /// Release Date
                         Text("Release: ${movie.releaseDate}"),
-
                         const SizedBox(height: 12),
-
-                        /// Overview Title
                         const Text(
                           "Overview",
                           style: TextStyle(
@@ -99,10 +90,7 @@ class MovieDetailsScreen extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-
                         const SizedBox(height: 6),
-
-                        /// Overview Text
                         Text(movie.overview),
                       ],
                     ),
