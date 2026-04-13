@@ -1,4 +1,3 @@
-import 'package:flutter/rendering.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:movie_explorer_app/features/movie/data/models/movie_model.dart';
 
@@ -24,7 +23,7 @@ class HiveService implements LocalStorageService {
     try {
       await Hive.openBox<MovieModel>(favoritesBox);
     } catch (_) {
-      debugPrint("Failed to open Hive box"); // ✅ debug log
+      // Preserve startup flow if box open fails; repository handles empty state.
     }
   }
 

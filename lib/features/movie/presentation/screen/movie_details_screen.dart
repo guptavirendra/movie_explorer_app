@@ -30,8 +30,7 @@ class MovieDetailsScreen extends StatelessWidget {
 
             if (state is MovieDetailsLoaded) {
               final movie = state.movie;
-              final imagePath =
-                  movie.backdropPath.isNotEmpty
+              final imagePath = movie.backdropPath.isNotEmpty
                   ? movie.backdropPath
                   : movie.posterPath;
 
@@ -44,8 +43,7 @@ class MovieDetailsScreen extends StatelessWidget {
                       height: 300,
                       width: double.infinity,
                       fit: BoxFit.cover,
-
-                        imageUrl: "https://image.tmdb.org/t/p/w780$imagePath",
+                      imageUrl: "https://image.tmdb.org/t/p/w780$imagePath",
                       placeholder: (_, __) =>
                           const Center(child: CircularProgressIndicator()),
                       errorWidget: (_, __, ___) =>

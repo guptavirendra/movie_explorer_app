@@ -1,4 +1,3 @@
-import 'package:flutter/rendering.dart';
 import 'package:movie_explorer_app/core/error/failures.dart';
 import 'package:movie_explorer_app/core/network/network_info.dart';
 import 'package:movie_explorer_app/features/movie/data/datasources/movie_local_datasource.dart';
@@ -21,8 +20,7 @@ class MovieRepositoriesImpl implements MovieRepository {
   @override
   Future<MovieResponse> getPopularMovies(int page) async {
     if (!await networkInfo.isConnected) {
-      debugPrint("No internet connection detected."); // ✅ debug log
-      throw NetworkFailure(); // ✅ clean error for no internet
+      throw NetworkFailure();
     }
     try {
       final data = await remoteDataSource.getPopularMovies(page);
@@ -32,7 +30,7 @@ class MovieRepositoriesImpl implements MovieRepository {
 
       return MovieResponse(movies: movies, totalPages: data['totalPages']);
     } on ServerException catch (_) {
-      throw ServerFailure(); // ✅ pass server error details
+      throw ServerFailure();
     }
   }
 

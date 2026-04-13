@@ -1,5 +1,5 @@
 abstract class MovieState {
-  get props => [];
+  List<Object?> get props => [];
 }
 
 class MovieInitial extends MovieState {}
@@ -13,7 +13,7 @@ class MovieLoaded extends MovieState {
   MovieLoaded({required this.movies, required this.hasReachedMax});
 
   @override
-  get props => [movies, hasReachedMax];
+  List<Object?> get props => [movies, hasReachedMax];
 }
 
 class MovieError extends MovieState {
@@ -22,5 +22,5 @@ class MovieError extends MovieState {
   MovieError({required this.message});
 
   @override
-  get props => [message];
+  List<Object?> get props => [message];
 }

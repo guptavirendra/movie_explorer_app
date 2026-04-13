@@ -103,10 +103,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     const SizedBox(height: 12),
                     ElevatedButton(
                       onPressed: () {
-                        final bloc = context.read<MovieBloc>();
-                        debugPrint("Retrying clicked..."); // ✅ debug log
-                        //bloc.emit(MovieInitial()); // ✅ force state reset
-                        bloc.add(FetchPopularMovies());
+                        context.read<MovieBloc>().add(FetchPopularMovies());
                       },
                       child: const Text("Retry"),
                     ),
@@ -126,9 +123,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       itemCount: state.movies.length,
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            childAspectRatio: 0.6,
-                          ),
+                        crossAxisCount: 2,
+                        childAspectRatio: 0.6,
+                      ),
                       itemBuilder: (_, index) {
                         final movie = state.movies[index];
 

@@ -15,8 +15,7 @@ class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
   MovieRemoteDataSourceImpl(this.dioClient);
 
   ServerException _mapDioException(DioException e) {
-    final isNetworkIssue =
-        e.type == DioExceptionType.connectionError ||
+    final isNetworkIssue = e.type == DioExceptionType.connectionError ||
         e.type == DioExceptionType.connectionTimeout ||
         e.type == DioExceptionType.receiveTimeout ||
         e.type == DioExceptionType.sendTimeout ||
@@ -48,7 +47,8 @@ class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
   @override
   Future<MovieModel> getMovieDetails(int id) async {
     try {
-      final response = await dioClient.dio.get('${ApiConstants.movieDetails}/$id');
+      final response =
+          await dioClient.dio.get('${ApiConstants.movieDetails}/$id');
       return MovieModel.fromJson(response.data);
     } on DioException catch (e) {
       throw _mapDioException(e);

@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_explorer_app/core/error/failures.dart';
 import 'package:movie_explorer_app/features/movie/domain/usecases/params.dart';
@@ -26,9 +25,6 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
   ) async {
     page = PageParams(page: 1);
     emit(MovieLoading());
-    debugPrint(
-      "Fetching popular movies for page ${page.page}...",
-    ); // ✅ debug log
 
     try {
       final response = await getPopularMovies(page);

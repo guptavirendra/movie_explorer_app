@@ -9,10 +9,9 @@ class NetworkInfo {
 
   Future<bool> get isConnected async {
     final connectivityResult = await connectivity.checkConnectivity();
-
-    final hasNetwork = !connectivityResult.contains(ConnectivityResult.none);
-
-    //if (!hasNetwork) return false;
+    if (connectivityResult.contains(ConnectivityResult.none)) {
+      return false;
+    }
 
     try {
       final result = await InternetAddress.lookup('google.com');
