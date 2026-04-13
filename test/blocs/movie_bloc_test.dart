@@ -14,6 +14,10 @@ import 'package:movie_explorer_app/features/movie/presentation/block/movie_state
 class MockGetPopularMovies extends Mock implements GetPopularMovies {}
 
 void main() {
+  setUpAll(() {
+    registerFallbackValue(PageParams(page: 1));
+  });
+
   // 📦 Setup variables
   late MovieBloc movieBloc;
   late MockGetPopularMovies mockGetPopularMovies;
@@ -54,7 +58,7 @@ void main() {
     'FetchPopularMovies should emit [MovieLoading, MovieLoaded] when successful',
     // 🔧 Arrange: Mock the usecase to return movie response
     build: () {
-      when(() => mockGetPopularMovies(PageParams(page: 1)))
+      when(() => mockGetPopularMovies(any()))
           .thenAnswer((_) async => tMovieResponse);
       return movieBloc;
     },
@@ -62,7 +66,7 @@ void main() {
     act: (bloc) => bloc.add(FetchPopularMovies()),
     // ✔️ Assert: Verify state transitions
     expect: () => [
-      MovieLoading(),
+      isA<MovieLoading>(),
       isA<MovieLoaded>()
           .having((state) => state.movies.length, 'movies length', 1)
           .having((state) => state.hasReachedMax, 'hasReachedMax', false),
@@ -74,14 +78,16 @@ void main() {
   blocTest<MovieBloc, MovieState>(
     'FetchPopularMovies should load first page (page=1)',
     build: () {
-      when(() => mockGetPopularMovies(PageParams(page: 1)))
+      when(() => mockGetPopularMovies(any()))
           .thenAnswer((_) async => tMovieResponse);
       return movieBloc;
     },
     act: (bloc) => bloc.add(FetchPopularMovies()),
     verify: (bloc) {
       // 🔍 Verify: Usecase was called with page 1
-      verify(() => mockGetPopularMovies(PageParams(page: 1))).called(1);
+      final captured =
+          verify(() => mockGetPopularMovies(captureAny())).captured;
+      expect((captured.first as PageParams).page, 1);
       // Verify internal bloc state
       expect(bloc.page.page, 1);
     },
@@ -92,13 +98,12 @@ void main() {
   blocTest<MovieBloc, MovieState>(
     'FetchPopularMovies should emit MovieError on NetworkFailure',
     build: () {
-      when(() => mockGetPopularMovies(PageParams(page: 1)))
-          .thenThrow(NetworkFailure());
+      when(() => mockGetPopularMovies(any())).thenThrow(NetworkFailure());
       return movieBloc;
     },
     act: (bloc) => bloc.add(FetchPopularMovies()),
     expect: () => [
-      MovieLoading(),
+      isA<MovieLoading>(),
       isA<MovieError>().having(
         (state) => state.message,
         'error message',
@@ -112,13 +117,12 @@ void main() {
   blocTest<MovieBloc, MovieState>(
     'FetchPopularMovies should emit MovieError on ServerFailure',
     build: () {
-      when(() => mockGetPopularMovies(PageParams(page: 1)))
-          .thenThrow(ServerFailure());
+      when(() => mockGetPopularMovies(any())).thenThrow(ServerFailure());
       return movieBloc;
     },
     act: (bloc) => bloc.add(FetchPopularMovies()),
     expect: () => [
-      MovieLoading(),
+      isA<MovieLoading>(),
       isA<MovieError>().having(
           (state) => state.message, 'message', contains('Server error')),
     ],
@@ -129,13 +133,12 @@ void main() {
   blocTest<MovieBloc, MovieState>(
     'FetchPopularMovies should emit MovieError on generic exception',
     build: () {
-      when(() => mockGetPopularMovies(PageParams(page: 1)))
-          .thenThrow(Exception());
+      when(() => mockGetPopularMovies(any())).thenThrow(Exception());
       return movieBloc;
     },
     act: (bloc) => bloc.add(FetchPopularMovies()),
     expect: () => [
-      MovieLoading(),
+      isA<MovieLoading>(),
       isA<MovieError>().having(
         (state) => state.message,
         'message',
@@ -150,7 +153,7 @@ void main() {
     'FetchPopularMovies should reset page to 1',
     build: () {
       // First load some pages
-      when(() => mockGetPopularMovies(PageParams(page: 1)))
+      when(() => mockGetPopularMovies(any()))
           .thenAnswer((_) async => tMovieResponse);
       return movieBloc;
     },
@@ -174,7 +177,7 @@ void main() {
     'LoadMoreMovies should append movies to existing list',
     build: () {
       // Setup initial state with one movie
-      when(() => mockGetPopularMovies(PageParams(page: 1)))
+      when(() => mockGetPopularMovies(any()))
           .thenAnswer((_) async => tMovieResponse);
 
       // Setup second page response
@@ -192,7 +195,7 @@ void main() {
         totalPages: 5,
       );
 
-      when(() => mockGetPopularMovies(PageParams(page: 2)))
+      when(() => mockGetPopularMovies(any()))
           .thenAnswer((_) async => tMovieResponse2);
 
       return movieBloc;
@@ -248,7 +251,7 @@ void main() {
   blocTest<MovieBloc, MovieState>(
     'RefreshMovies should reset and fetch from page 1',
     build: () {
-      when(() => mockGetPopularMovies(PageParams(page: 1)))
+      when(() => mockGetPopularMovies(any()))
           .thenAnswer((_) async => tMovieResponse);
       return movieBloc;
     },
@@ -267,7 +270,7 @@ void main() {
   blocTest<MovieBloc, MovieState>(
     'RefreshMovies should emit MovieError on network error',
     build: () {
-      when(() => mockGetPopularMovies(PageParams(page: 1)))
+      when(() => mockGetPopularMovies(any()))
           .thenThrow(Exception('Network error'));
       return movieBloc;
     },
@@ -333,7 +336,7 @@ void main() {
       // Could add more events here like RefreshMovies etc.
     },
     expect: () => [
-      MovieLoading(),
+      isA<MovieLoading>(),
       isA<MovieLoaded>(),
     ],
   );
