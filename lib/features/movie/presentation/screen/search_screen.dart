@@ -107,8 +107,7 @@ class _SearchScreenState extends State<SearchScreen> {
                         leading: SizedBox(
                           width: 60,
                           height: 90,
-                          child: movie.posterPath != null &&
-                                  movie.posterPath!.isNotEmpty
+                          child: movie.posterPath.isNotEmpty
                               ? CachedNetworkImage(
                                   imageUrl:
                                       "https://image.tmdb.org/t/p/w200${movie.posterPath}",

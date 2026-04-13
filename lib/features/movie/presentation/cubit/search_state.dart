@@ -7,9 +7,9 @@ class SearchInitial extends SearchState {}
 class SearchLoading extends SearchState {}
 
 class SearchLoaded extends SearchState {
-  final List movies;
+  final List<Movie> movies;
   final bool hasReachedMax;
-  final bool isLoadingMore; // ✅ ADD THIS
+  final bool isLoadingMore;
   SearchLoaded({
     required this.movies,
     this.hasReachedMax = false,
