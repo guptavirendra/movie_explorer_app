@@ -1,27 +1,22 @@
-import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:movie_explorer_app/core/routes/app_routes.dart';
-import 'package:movie_explorer_app/features/movie/domain/usecases/params.dart';
 
 class NavigationService {
-  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+  late GoRouter _router;
 
-  Future<T?> pushNamed<T extends Object?>(
-    String routeName, {
-    Object? arguments,
-  }) {
-    return navigatorKey.currentState!
-        .pushNamed<T>(routeName, arguments: arguments);
+  void attachRouter(GoRouter router) {
+    _router = router;
   }
 
   void goToSearch() {
-    pushNamed(AppRoutes.search);
+    _router.push(AppRoutes.search);
   }
 
   void goToFavourites() {
-    pushNamed(AppRoutes.favourites);
+    _router.push(AppRoutes.favourites);
   }
 
   void goToMovieDetails(int movieId) {
-    pushNamed(AppRoutes.details, arguments: MovieDetailsParams(movieId));
+    _router.push(AppRoutes.movieDetailsPath(movieId));
   }
 }

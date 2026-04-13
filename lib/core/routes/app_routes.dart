@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:movie_explorer_app/features/movie/domain/usecases/params.dart';
 import 'package:movie_explorer_app/features/movie/presentation/block/movie_bloc.dart';
 import 'package:movie_explorer_app/features/movie/presentation/block/movie_event.dart';
@@ -13,40 +14,51 @@ import 'package:movie_explorer_app/injections/service_locator.dart';
 class AppRoutes {
   static const String home = '/';
   static const String search = '/search';
-  static const String details = '/details';
+  static const String details = '/details/:movieId';
   static const String favourites = '/favourites';
 
-  static Route<dynamic> generateRoute(RouteSettings settings) {
-    switch (settings.name) {
-      case home:
-        return MaterialPageRoute(
-          builder: (_) => BlocProvider(
+  static String movieDetailsPath(int movieId) => '/details/$movieId';
+
+  static GoRouter createRouter() {
+    return GoRouter(
+      initialLocation: home,
+      routes: [
+        GoRoute(
+          path: home,
+          builder: (context, state) => BlocProvider(
             create: (_) => singleton<MovieBloc>()..add(FetchPopularMovies()),
             child: const HomeScreen(),
           ),
-        );
-      case search:
-        return MaterialPageRoute(
-          builder: (_) => BlocProvider(
+        ),
+        GoRoute(
+          path: search,
+          builder: (context, state) => BlocProvider(
             create: (_) => singleton<SearchCubit>(),
             child: const SearchScreen(),
           ),
-        );
-      case details:
-        final params = settings.arguments as MovieDetailsParams;
-        return MaterialPageRoute(
-          builder: (_) => MovieDetailsScreen(
-            movieDetailsParams: MovieDetailsParams(params.movieId),
-          ),
-        );
-      case favourites:
-        return MaterialPageRoute(builder: (_) => const FavouriteScreen());
-      default:
-        return MaterialPageRoute(
-          builder: (_) => Scaffold(
-            body: Center(child: Text('No route defined for ${settings.name}')),
-          ),
-        );
-    }
+        ),
+        GoRoute(
+          path: details,
+          builder: (context, state) {
+            final movieId = int.tryParse(state.pathParameters['movieId'] ?? '');
+            if (movieId == null) {
+              return const Scaffold(
+                body: Center(child: Text('Invalid movie id')),
+              );
+            }
+            return MovieDetailsScreen(
+              movieDetailsParams: MovieDetailsParams(movieId),
+            );
+          },
+        ),
+        GoRoute(
+          path: favourites,
+          builder: (context, state) => const FavouriteScreen(),
+        ),
+      ],
+      errorBuilder: (context, state) => Scaffold(
+        body: Center(child: Text(state.error?.toString() ?? 'Route not found')),
+      ),
+    );
   }
 }

@@ -11,11 +11,13 @@ void main() async {
   await dotenv.load(fileName: ".env");
   // Initialize the service locator and all dependencies
   await init();
+
+  final router = AppRoutes.createRouter();
+  singleton<NavigationService>().attachRouter(router);
+
   runApp(
-    MaterialApp(
-      navigatorKey: singleton<NavigationService>().navigatorKey,
-      onGenerateRoute: AppRoutes.generateRoute,
-      initialRoute: AppRoutes.home,
+    MaterialApp.router(
+      routerConfig: router,
     ),
   );
 }
