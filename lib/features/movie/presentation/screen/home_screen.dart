@@ -30,7 +30,6 @@ class _HomeScreenState extends State<HomeScreen> {
     connectivitySub = Connectivity().onConnectivityChanged.listen((result) {
       final isNowConnected = !result.contains(ConnectivityResult.none);
 
-      // 🔥 only trigger when connection changes from OFF → ON
       if (!hasInternet && isNowConnected) {
         if (mounted) {
           final state = context.read<MovieBloc>().state;
@@ -141,7 +140,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
 
-                  // ✅ SHOW ONLY DURING LOAD MORE
                   if (bloc.isFetching)
                     const Padding(
                       padding: EdgeInsets.all(16),

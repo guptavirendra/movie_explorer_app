@@ -52,7 +52,6 @@ class SearchCubit extends Cubit<SearchState> {
 
     if (currentState.hasReachedMax || currentState.isLoadingMore) return;
 
-    // ✅ show loader
     emit(currentState.copyWith(isLoadingMore: true));
 
     try {
