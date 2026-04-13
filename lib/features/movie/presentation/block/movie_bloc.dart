@@ -40,7 +40,7 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
       emit(MovieError(message: 'Please check your connection and try again.'));
     } on ServerFailure catch (e) {
       emit(MovieError(message: 'Server error: ${e.message}'));
-    } catch (e) {
+    } catch (_) {
       emit(MovieError(message: 'An unexpected error occurred'));
     }
   }
@@ -88,7 +88,7 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
           hasReachedMax: page.page >= totalPages,
         ),
       );
-    } catch (e) {
+    } catch (_) {
       emit(MovieError(message: 'Failed to refresh movies'));
     }
   }

@@ -66,7 +66,7 @@ class SearchCubit extends Cubit<SearchState> {
           isLoadingMore: false,
         ),
       );
-    } catch (e) {
+    } catch (_) {
       emit(currentState.copyWith(isLoadingMore: false));
     }
   }
