@@ -44,7 +44,17 @@ void main() {
 
     when(() => mockRemoteDataSource.getPopularMovies(1)).thenAnswer(
       (_) async => {
-        "results": [tMovieModel],
+        "results": [
+          {
+            "id": tMovieModel.id,
+            "title": tMovieModel.title,
+            "overview": tMovieModel.overview,
+            "poster_path": tMovieModel.posterPath,
+            "backdrop_path": tMovieModel.backdropPath,
+            "vote_average": tMovieModel.rating,
+            "release_date": tMovieModel.releaseDate,
+          },
+        ],
         "totalPages": 1,
       },
     );

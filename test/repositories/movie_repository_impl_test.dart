@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:movie_explorer_app/core/error/failures.dart';
@@ -15,10 +14,20 @@ class MockLocalDataSource extends Mock implements MovieLocalDatasource {}
 
 class MockNetworkInfo extends Mock implements NetworkInfo {}
 
-// 🔧 Fallback values for mocktail
-class FakeRequestOptions extends Fake implements RequestOptions {}
-
 void main() {
+  setUpAll(() {
+    registerFallbackValue(
+      MovieModel(
+        id: 0,
+        title: '',
+        overview: '',
+        posterPath: '',
+        rating: 0,
+        releaseDate: '',
+      ),
+    );
+  });
+
   // 📦 Setup variables
   late MovieRepositoriesImpl repository;
   late MockRemoteDataSource mockRemoteDataSource;
@@ -63,7 +72,17 @@ void main() {
       // - Remote datasource returns mock data
       when(() => mockRemoteDataSource.getPopularMovies(1)).thenAnswer(
         (_) async => {
-          "results": [tMovieModel],
+          "results": [
+            {
+              "id": tMovieModel.id,
+              "title": tMovieModel.title,
+              "overview": tMovieModel.overview,
+              "poster_path": tMovieModel.posterPath,
+              "backdrop_path": tMovieModel.backdropPath,
+              "vote_average": tMovieModel.rating,
+              "release_date": tMovieModel.releaseDate,
+            },
+          ],
           "totalPages": 10,
         },
       );
@@ -129,7 +148,17 @@ void main() {
       when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => true);
       when(() => mockRemoteDataSource.getPopularMovies(2)).thenAnswer(
         (_) async => {
-          "results": [tMovieModel],
+          "results": [
+            {
+              "id": tMovieModel.id,
+              "title": tMovieModel.title,
+              "overview": tMovieModel.overview,
+              "poster_path": tMovieModel.posterPath,
+              "backdrop_path": tMovieModel.backdropPath,
+              "vote_average": tMovieModel.rating,
+              "release_date": tMovieModel.releaseDate,
+            },
+          ],
           "totalPages": 10,
         },
       );
@@ -176,7 +205,7 @@ void main() {
     () async {
       // 🔧 Arrange: Simulate connection error
       when(() => mockRemoteDataSource.getMovieDetails(1))
-          .thenThrow(DioException(requestOptions: FakeRequestOptions()));
+          .thenThrow(ServerException(message: 'No internet', statusCode: 0));
 
       // 🎬 Act & Assert: Verify NetworkFailure is thrown
       expect(
@@ -238,7 +267,7 @@ void main() {
     'toggleFavorite should save movie to local storage',
     () async {
       // 🔧 Arrange: Mock local storage
-      when(() => mockLocalDataSource.toggleFavorite(tMovieModel))
+      when(() => mockLocalDataSource.toggleFavorite(any()))
           .thenAnswer((_) async => {});
 
       // 🎬 Act: Toggle favorite
@@ -304,13 +333,23 @@ void main() {
       when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => true);
       when(() => mockRemoteDataSource.getPopularMovies(1)).thenAnswer(
         (_) async => {
-          "results": [tMovieModel],
+          "results": [
+            {
+              "id": tMovieModel.id,
+              "title": tMovieModel.title,
+              "overview": tMovieModel.overview,
+              "poster_path": tMovieModel.posterPath,
+              "backdrop_path": tMovieModel.backdropPath,
+              "vote_average": tMovieModel.rating,
+              "release_date": tMovieModel.releaseDate,
+            },
+          ],
           "totalPages": 1,
         },
       );
       when(() => mockRemoteDataSource.getMovieDetails(1))
           .thenAnswer((_) async => tMovieModel);
-      when(() => mockLocalDataSource.toggleFavorite(tMovieModel))
+      when(() => mockLocalDataSource.toggleFavorite(any()))
           .thenAnswer((_) async => {});
       when(() => mockLocalDataSource.getFavorites())
           .thenAnswer((_) async => [tMovieModel]);
@@ -328,6 +367,3 @@ void main() {
     },
   );
 }
-
-// 🔥 Extension for DioException
-extension on DioException {}
