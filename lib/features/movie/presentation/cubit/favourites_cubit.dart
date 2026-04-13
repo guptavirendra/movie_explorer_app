@@ -7,10 +7,10 @@ import 'package:movie_explorer_app/features/movie/domain/usecases/toggle_favouri
 import 'package:movie_explorer_app/features/movie/presentation/cubit/favourites_state.dart';
 
 class FavouritesCubit extends Cubit<FavouritesState> {
-  GetFavourite getFavorites;
-  ToggleFavourite toggleFavorite;
+  final GetFavourite getFavorites;
+  final ToggleFavourite toggleFavorite;
   FavouritesCubit({required this.getFavorites, required this.toggleFavorite})
-    : super(FavouritesInitial());
+      : super(FavouritesInitial());
 
   Future<void> loadFavorites() async {
     emit(FavouritesLoading());
@@ -27,8 +27,6 @@ class FavouritesCubit extends Cubit<FavouritesState> {
       } else {
         emit(FavouritesError(message: e.toString()));
       }
-
-      ///   emit(FavouritesError(message: e.toString()));
     }
   }
 

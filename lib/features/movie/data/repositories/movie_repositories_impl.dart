@@ -24,6 +24,10 @@ class MovieRepositoriesImpl implements MovieRepository {
     throw ServerFailure();
   }
 
+  Never _throwCacheFailure() {
+    throw CacheFailure();
+  }
+
   @override
   Future<MovieResponse> getPopularMovies(int page) async {
     if (!await networkInfo.isConnected) {
@@ -62,14 +66,21 @@ class MovieRepositoriesImpl implements MovieRepository {
       rating: movie.rating,
       releaseDate: movie.releaseDate,
     );
-
-    await localDataSource.toggleFavorite(model);
+    try {
+      await localDataSource.toggleFavorite(model);
+    } catch (_) {
+      _throwCacheFailure();
+    }
   }
 
   @override
   Future<List<Movie>> getFavoriteMovies() async {
-    final favoriteMovies = await localDataSource.getFavorites();
-    return favoriteMovies.map((movie) => movie.toEntity()).toList();
+    try {
+      final favoriteMovies = await localDataSource.getFavorites();
+      return favoriteMovies.map((movie) => movie.toEntity()).toList();
+    } catch (_) {
+      _throwCacheFailure();
+    }
   }
 
   @override
