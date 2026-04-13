@@ -8,10 +8,11 @@ import 'package:movie_explorer_app/features/movie/presentation/block/movie_bloc.
 import 'package:movie_explorer_app/features/movie/presentation/block/movie_event.dart';
 import 'package:movie_explorer_app/features/movie/presentation/block/movie_state.dart';
 import 'package:movie_explorer_app/features/movie/presentation/widget/movie_card.dart';
-import 'package:movie_explorer_app/injections/service_locator.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  final NavigationService navigationService;
+
+  const HomeScreen({super.key, required this.navigationService});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -72,13 +73,13 @@ class _HomeScreenState extends State<HomeScreen> {
           IconButton(
             icon: const Icon(Icons.search),
             onPressed: () {
-              singleton<NavigationService>().goToSearch();
+              widget.navigationService.goToSearch();
             },
           ),
           IconButton(
             icon: const Icon(Icons.favorite),
             onPressed: () {
-              singleton<NavigationService>().goToFavourites();
+              widget.navigationService.goToFavourites();
             },
           ),
         ],
@@ -129,9 +130,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         return MovieCard(
                           movie: movie,
                           onTap: () {
-                            singleton<NavigationService>().goToMovieDetails(
-                              movie.id,
-                            );
+                            widget.navigationService.goToMovieDetails(movie.id);
                           },
                         );
                       },

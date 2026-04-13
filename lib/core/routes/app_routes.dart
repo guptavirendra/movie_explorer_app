@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:movie_explorer_app/core/routes/navigation_service.dart';
 import 'package:movie_explorer_app/features/movie/domain/usecases/params.dart';
 import 'package:movie_explorer_app/features/movie/presentation/block/movie_bloc.dart';
 import 'package:movie_explorer_app/features/movie/presentation/block/movie_event.dart';
+import 'package:movie_explorer_app/features/movie/presentation/cubit/favourites_cubit.dart';
+import 'package:movie_explorer_app/features/movie/presentation/cubit/movie_details_cubit.dart';
 import 'package:movie_explorer_app/features/movie/presentation/cubit/search_cubit.dart';
 import 'package:movie_explorer_app/features/movie/presentation/screen/favourite_screen.dart';
 import 'package:movie_explorer_app/features/movie/presentation/screen/home_screen.dart';
@@ -27,14 +30,18 @@ class AppRoutes {
           path: home,
           builder: (context, state) => BlocProvider(
             create: (_) => singleton<MovieBloc>()..add(FetchPopularMovies()),
-            child: const HomeScreen(),
+            child: HomeScreen(
+              navigationService: singleton<NavigationService>(),
+            ),
           ),
         ),
         GoRoute(
           path: search,
           builder: (context, state) => BlocProvider(
             create: (_) => singleton<SearchCubit>(),
-            child: const SearchScreen(),
+            child: SearchScreen(
+              navigationService: singleton<NavigationService>(),
+            ),
           ),
         ),
         GoRoute(
@@ -46,14 +53,20 @@ class AppRoutes {
                 body: Center(child: Text('Invalid movie id')),
               );
             }
-            return MovieDetailsScreen(
-              movieDetailsParams: MovieDetailsParams(movieId),
+            final params = MovieDetailsParams(movieId);
+            return BlocProvider(
+              create: (_) =>
+                  singleton<MovieDetailsCubit>()..fetchMovieDetails(params),
+              child: const MovieDetailsScreen(),
             );
           },
         ),
         GoRoute(
           path: favourites,
-          builder: (context, state) => const FavouriteScreen(),
+          builder: (context, state) => BlocProvider(
+            create: (_) => singleton<FavouritesCubit>()..loadFavorites(),
+            child: const FavouriteScreen(),
+          ),
         ),
       ],
       errorBuilder: (context, state) => Scaffold(

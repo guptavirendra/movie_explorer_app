@@ -2,13 +2,14 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_explorer_app/core/routes/navigation_service.dart';
-import 'package:movie_explorer_app/injections/service_locator.dart';
 
 import '../cubit/search_cubit.dart';
 import '../cubit/search_state.dart';
 
 class SearchScreen extends StatefulWidget {
-  const SearchScreen({super.key});
+  final NavigationService navigationService;
+
+  const SearchScreen({super.key, required this.navigationService});
 
   @override
   State<SearchScreen> createState() => _SearchScreenState();
@@ -128,9 +129,7 @@ class _SearchScreenState extends State<SearchScreen> {
                         title: Text(movie.title),
                         subtitle: Text("⭐ ${movie.rating}"),
                         onTap: () {
-                          singleton<NavigationService>().goToMovieDetails(
-                            movie.id,
-                          );
+                          widget.navigationService.goToMovieDetails(movie.id);
                         },
                       );
                     },
