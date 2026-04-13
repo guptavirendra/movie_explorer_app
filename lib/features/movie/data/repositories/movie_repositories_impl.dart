@@ -38,8 +38,8 @@ class MovieRepositoriesImpl implements MovieRepository {
       final movies = data.movies.map((movie) => movie.toEntity()).toList();
 
       return MovieResponse(movies: movies, totalPages: data.totalPages);
-    } on ServerException catch (_) {
-      throw ServerFailure();
+    } on ServerException catch (e) {
+      _throwFromServerException(e);
     }
   }
 

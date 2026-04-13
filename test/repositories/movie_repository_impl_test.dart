@@ -130,6 +130,20 @@ void main() {
     },
   );
 
+  test(
+    'getPopularMovies should throw NetworkFailure on connection server exception',
+    () async {
+      when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => true);
+      when(() => mockRemoteDataSource.getPopularMovies(1))
+          .thenThrow(ServerException(message: 'No internet', statusCode: 0));
+
+      expect(
+        () => repository.getPopularMovies(1),
+        throwsA(isA<NetworkFailure>()),
+      );
+    },
+  );
+
   // ✅ TEST 4: Pagination support for popular movies
   // 📌 Purpose: Verify repository correctly handles different page numbers
   test(
