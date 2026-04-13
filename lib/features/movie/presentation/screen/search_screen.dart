@@ -47,7 +47,7 @@ class _SearchScreenState extends State<SearchScreen> {
       appBar: AppBar(title: const Text("Search Movies")),
       body: Column(
         children: [
-          // 🔍 Search Field
+          // Search field
           Padding(
             padding: const EdgeInsets.all(12),
             child: TextField(
@@ -64,12 +64,12 @@ class _SearchScreenState extends State<SearchScreen> {
             ),
           ),
 
-          // 📋 Results
+          // Results
           Expanded(
             child: BlocBuilder<SearchCubit, SearchState>(
               builder: (context, state) {
                 if (state is SearchInitial) {
-                  return const Center(child: Text("Start typing to search 🎬"));
+                  return const Center(child: Text("Start typing to search"));
                 }
 
                 if (state is SearchLoading) {
@@ -77,7 +77,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 }
 
                 if (state is SearchEmpty) {
-                  return const Center(child: Text("No results found 😔"));
+                  return const Center(child: Text("No results found"));
                 }
 
                 if (state is SearchError) {

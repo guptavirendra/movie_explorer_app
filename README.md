@@ -235,7 +235,7 @@ flutter test --coverage
 
 ### Domain Layer
 - **Entities**: Pure Dart classes representing business objects
-  - `Movie` with id, title, overview, posterPath, rating, releaseDate
+  - `Movie` with id, title, overview, posterPath, backdropPath, rating, releaseDate
 - **Use Cases**: Single responsibility business logic
   - `GetPopularMovies`: Fetches popular movies with pagination
   - `SearchMovies`: Searches movies by query with pagination
@@ -289,7 +289,24 @@ In MVVM terms, Bloc/Cubit are used as the ViewModel layer that mediates between 
 - **Movie Details Endpoint**: `GET /movie/{movie_id}`
 - **Search Movies Endpoint**: `GET /search/movie`
 - **Base URL**: `https://api.themoviedb.org/3`
-- **Image Base URL**: `https://image.tmdb.org/t/p/w200` (for posters)
+- **Image Base URL**: `https://image.tmdb.org/t/p/w200` (posters/lists)
+- **Backdrop Base URL**: `https://image.tmdb.org/t/p/w780` (details hero image)
+
+## Architecture Decision Notes
+
+- Bloc/Cubit are intentionally used as the MVVM ViewModel layer to keep presentation logic testable and independent from widgets.
+- GetIt is used for explicit dependency wiring and lifecycle control across blocs/cubits, use cases, repositories, and data sources.
+- Repository + use case boundaries isolate TMDb and Hive concerns from UI, allowing feature growth without coupling screens to infra details.
+
+## Final Submission Readiness
+
+- [x] Clean Architecture with domain/data/presentation boundaries
+- [x] MVVM mapping documented (Bloc/Cubit as ViewModel)
+- [x] Centralized Dio error mapping across endpoints
+- [x] Hive favorites with persistence
+- [x] .env configured and declared in Flutter assets
+- [x] Meaningful incremental commit history on main branch
+- [x] Tests and analyzer passing in local environment
 
 ## Troubleshooting
 
