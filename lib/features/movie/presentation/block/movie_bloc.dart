@@ -52,7 +52,7 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
   ) async {
     if (isFetching || state is! MovieLoaded) return;
 
-    if (page.page >= totalPages) return; // ✅ STOP HERE
+    if (page.page >= totalPages) return;
 
     isFetching = true;
 
@@ -66,7 +66,7 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
       emit(
         MovieLoaded(
           movies: [...currentState.movies, ...response.movies],
-          hasReachedMax: page.page >= totalPages, // ✅ FINAL FIX
+          hasReachedMax: page.page >= totalPages,
         ),
       );
     } catch (_) {}
@@ -76,18 +76,16 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
 
   Future<void> _onRefresh(RefreshMovies event, Emitter<MovieState> emit) async {
     try {
-      // ✅ Reset page
       page = PageParams(page: 1);
 
       final response = await getPopularMovies(page);
 
-      // ✅ Update total pages again
       totalPages = response.totalPages;
 
       emit(
         MovieLoaded(
           movies: response.movies,
-          hasReachedMax: page.page >= totalPages, // ✅ IMPORTANT
+          hasReachedMax: page.page >= totalPages,
         ),
       );
     } catch (e) {

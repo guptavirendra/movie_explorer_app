@@ -62,7 +62,7 @@ class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
         ApiConstants.searchMovies,
         queryParameters: {'query': query, 'page': page},
       );
-      final List results = response.data['results'];
+      final List<dynamic> results = response.data['results'];
       return results.map((movie) => MovieModel.fromJson(movie)).toList();
     } on DioException catch (e) {
       throw _mapDioException(e);

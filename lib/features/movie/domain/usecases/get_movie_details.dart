@@ -10,6 +10,6 @@ class GetMovieDetails implements UseCase<Movie, MovieDetailsParams> {
 
   @override
   Future<Movie> call(MovieDetailsParams params) async {
-    return await repository.getMovieDetails(params.movieId);
+    return repository.getMovieDetails(params.movieId);
   }
 }

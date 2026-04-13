@@ -9,7 +9,7 @@ class SearchMovies implements UseCase<List<Movie>, SearchParams> {
 
   @override
   Future<List<Movie>> call(SearchParams params) async {
-    return await repository.searchMovies(params.query, params.page);
+    return repository.searchMovies(params.query, params.page);
   }
 }
 

@@ -8,7 +8,6 @@ class GetFavourite implements UseCase<List<Movie>, NoParams> {
 
   @override
   Future<List<Movie>> call(NoParams params) async {
-    // Implementation for getting favorite movies
-    return await repository.getFavoriteMovies();
+    return repository.getFavoriteMovies();
   }
 }

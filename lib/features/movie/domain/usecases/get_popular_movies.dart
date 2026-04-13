@@ -10,6 +10,6 @@ class GetPopularMovies implements UseCase<MovieResponse, PageParams> {
 
   @override
   Future<MovieResponse> call(PageParams params) async {
-    return await repository.getPopularMovies(params.page);
+    return repository.getPopularMovies(params.page);
   }
 }
