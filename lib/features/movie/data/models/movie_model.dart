@@ -15,6 +15,9 @@ class MovieModel {
   @HiveField(3)
   final String posterPath;
 
+  @HiveField(6)
+  final String backdropPath;
+
   @HiveField(4)
   final double rating;
 
@@ -26,6 +29,7 @@ class MovieModel {
     required this.title,
     required this.overview,
     required this.posterPath,
+    this.backdropPath = '',
     required this.rating,
     required this.releaseDate,
   });
@@ -36,6 +40,7 @@ class MovieModel {
       title: json['title'] ?? '',
       overview: json['overview'] ?? '',
       posterPath: json['poster_path'] ?? '',
+      backdropPath: json['backdrop_path'] ?? '',
       rating: (json['vote_average'] ?? 0).toDouble(),
       releaseDate: json['release_date'] ?? '',
     );
@@ -46,6 +51,7 @@ class MovieModel {
       title: title,
       overview: overview,
       posterPath: posterPath,
+      backdropPath: backdropPath,
       rating: rating,
       releaseDate: releaseDate,
     );
@@ -67,6 +73,7 @@ class MovieModelAdapter extends TypeAdapter<MovieModel> {
       title: fields[1] as String,
       overview: fields[2] as String,
       posterPath: fields[3] as String,
+      backdropPath: fields[6] as String? ?? '',
       rating: fields[4] as double,
       releaseDate: fields[5] as String,
     );
@@ -75,7 +82,7 @@ class MovieModelAdapter extends TypeAdapter<MovieModel> {
   @override
   void write(BinaryWriter writer, MovieModel obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(7)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -87,6 +94,8 @@ class MovieModelAdapter extends TypeAdapter<MovieModel> {
       ..writeByte(4)
       ..write(obj.rating)
       ..writeByte(5)
-      ..write(obj.releaseDate);
+      ..write(obj.releaseDate)
+      ..writeByte(6)
+      ..write(obj.backdropPath);
   }
 }

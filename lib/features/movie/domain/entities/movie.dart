@@ -5,6 +5,7 @@ class Movie extends Equatable {
   final String title;
   final String overview;
   final String posterPath;
+  final String backdropPath;
   final double rating;
   final String releaseDate;
 
@@ -13,6 +14,7 @@ class Movie extends Equatable {
     required this.title,
     required this.overview,
     required this.posterPath,
+    this.backdropPath = '',
     required this.rating,
     required this.releaseDate,
   });
@@ -23,6 +25,7 @@ class Movie extends Equatable {
     title,
     overview,
     posterPath,
+    backdropPath,
     rating,
     releaseDate,
   ];
