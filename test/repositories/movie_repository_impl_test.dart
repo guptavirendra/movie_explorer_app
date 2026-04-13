@@ -5,6 +5,7 @@ import 'package:movie_explorer_app/core/network/network_info.dart';
 import 'package:movie_explorer_app/features/movie/data/datasources/movie_local_datasource.dart';
 import 'package:movie_explorer_app/features/movie/data/datasources/movie_remote_data_source.dart';
 import 'package:movie_explorer_app/features/movie/data/models/movie_model.dart';
+import 'package:movie_explorer_app/features/movie/data/models/popular_movies_response_model.dart';
 import 'package:movie_explorer_app/features/movie/data/repositories/movie_repositories_impl.dart';
 
 // 🎯 Mock classes for dependencies
@@ -71,20 +72,10 @@ void main() {
       when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => true);
       // - Remote datasource returns mock data
       when(() => mockRemoteDataSource.getPopularMovies(1)).thenAnswer(
-        (_) async => {
-          "results": [
-            {
-              "id": tMovieModel.id,
-              "title": tMovieModel.title,
-              "overview": tMovieModel.overview,
-              "poster_path": tMovieModel.posterPath,
-              "backdrop_path": tMovieModel.backdropPath,
-              "vote_average": tMovieModel.rating,
-              "release_date": tMovieModel.releaseDate,
-            },
-          ],
-          "totalPages": 10,
-        },
+        (_) async => PopularMoviesResponseModel(
+          movies: [tMovieModel],
+          totalPages: 10,
+        ),
       );
 
       // 🎬 Act: Call getPopularMovies
@@ -147,20 +138,10 @@ void main() {
       // 🔧 Arrange: Setup for page 2
       when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => true);
       when(() => mockRemoteDataSource.getPopularMovies(2)).thenAnswer(
-        (_) async => {
-          "results": [
-            {
-              "id": tMovieModel.id,
-              "title": tMovieModel.title,
-              "overview": tMovieModel.overview,
-              "poster_path": tMovieModel.posterPath,
-              "backdrop_path": tMovieModel.backdropPath,
-              "vote_average": tMovieModel.rating,
-              "release_date": tMovieModel.releaseDate,
-            },
-          ],
-          "totalPages": 10,
-        },
+        (_) async => PopularMoviesResponseModel(
+          movies: [tMovieModel],
+          totalPages: 10,
+        ),
       );
 
       // 🎬 Act: Request page 2
@@ -332,20 +313,10 @@ void main() {
       // 🔧 Arrange: Setup all mocks
       when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => true);
       when(() => mockRemoteDataSource.getPopularMovies(1)).thenAnswer(
-        (_) async => {
-          "results": [
-            {
-              "id": tMovieModel.id,
-              "title": tMovieModel.title,
-              "overview": tMovieModel.overview,
-              "poster_path": tMovieModel.posterPath,
-              "backdrop_path": tMovieModel.backdropPath,
-              "vote_average": tMovieModel.rating,
-              "release_date": tMovieModel.releaseDate,
-            },
-          ],
-          "totalPages": 1,
-        },
+        (_) async => PopularMoviesResponseModel(
+          movies: [tMovieModel],
+          totalPages: 1,
+        ),
       );
       when(() => mockRemoteDataSource.getMovieDetails(1))
           .thenAnswer((_) async => tMovieModel);

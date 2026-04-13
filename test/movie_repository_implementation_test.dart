@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:movie_explorer_app/features/movie/data/models/movie_model.dart';
+import 'package:movie_explorer_app/features/movie/data/models/popular_movies_response_model.dart';
 import 'package:movie_explorer_app/features/movie/data/repositories/movie_repositories_impl.dart';
 import 'package:movie_explorer_app/features/movie/domain/entities/movie_response.dart';
 
@@ -43,20 +44,10 @@ void main() {
     when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => true);
 
     when(() => mockRemoteDataSource.getPopularMovies(1)).thenAnswer(
-      (_) async => {
-        "results": [
-          {
-            "id": tMovieModel.id,
-            "title": tMovieModel.title,
-            "overview": tMovieModel.overview,
-            "poster_path": tMovieModel.posterPath,
-            "backdrop_path": tMovieModel.backdropPath,
-            "vote_average": tMovieModel.rating,
-            "release_date": tMovieModel.releaseDate,
-          },
-        ],
-        "totalPages": 1,
-      },
+      (_) async => PopularMoviesResponseModel(
+        movies: [tMovieModel],
+        totalPages: 1,
+      ),
     );
 
     // act

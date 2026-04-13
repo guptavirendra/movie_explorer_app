@@ -3,9 +3,10 @@ import 'package:movie_explorer_app/core/constants/api_constants.dart';
 import 'package:movie_explorer_app/core/error/failures.dart';
 import 'package:movie_explorer_app/core/network/dio_client.dart';
 import 'package:movie_explorer_app/features/movie/data/models/movie_model.dart';
+import 'package:movie_explorer_app/features/movie/data/models/popular_movies_response_model.dart';
 
 abstract class MovieRemoteDataSource {
-  Future<Map<String, dynamic>> getPopularMovies(int page);
+  Future<PopularMoviesResponseModel> getPopularMovies(int page);
   Future<MovieModel> getMovieDetails(int id);
   Future<List<MovieModel>> searchMovies(String query, int page);
 }
@@ -28,17 +29,14 @@ class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
   }
 
   @override
-  Future<Map<String, dynamic>> getPopularMovies(int page) async {
+  Future<PopularMoviesResponseModel> getPopularMovies(int page) async {
     try {
       final response = await dioClient.dio.get(
         ApiConstants.popularMovies,
         queryParameters: {'page': page},
       );
 
-      return {
-        "results": response.data['results'],
-        "totalPages": response.data['total_pages'],
-      };
+      return PopularMoviesResponseModel.fromJson(response.data);
     } on DioException catch (e) {
       throw _mapDioException(e);
     }

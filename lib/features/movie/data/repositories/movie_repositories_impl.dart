@@ -35,11 +35,9 @@ class MovieRepositoriesImpl implements MovieRepository {
     }
     try {
       final data = await remoteDataSource.getPopularMovies(page);
-      final movies = (data['results'] as List)
-          .map((e) => MovieModel.fromJson(e).toEntity())
-          .toList();
+      final movies = data.movies.map((movie) => movie.toEntity()).toList();
 
-      return MovieResponse(movies: movies, totalPages: data['totalPages']);
+      return MovieResponse(movies: movies, totalPages: data.totalPages);
     } on ServerException catch (_) {
       throw ServerFailure();
     }
