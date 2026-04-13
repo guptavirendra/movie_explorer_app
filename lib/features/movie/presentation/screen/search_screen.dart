@@ -16,9 +16,16 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   final ScrollController _scrollController = ScrollController();
+  final FocusNode _searchFocusNode = FocusNode();
+
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        _searchFocusNode.requestFocus();
+      }
+    });
     _scrollController.addListener(() {
       if (_scrollController.position.pixels >=
           _scrollController.position.maxScrollExtent - 200) {
@@ -30,6 +37,7 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   void dispose() {
     _scrollController.dispose();
+    _searchFocusNode.dispose();
     super.dispose();
   }
 
@@ -43,6 +51,8 @@ class _SearchScreenState extends State<SearchScreen> {
           Padding(
             padding: const EdgeInsets.all(12),
             child: TextField(
+              focusNode: _searchFocusNode,
+              autofocus: true,
               decoration: const InputDecoration(
                 hintText: "Search movies...",
                 border: OutlineInputBorder(),
