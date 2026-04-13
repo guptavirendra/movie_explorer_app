@@ -14,6 +14,12 @@ class SearchCubit extends Cubit<SearchState> {
 
   SearchCubit({required this.searchMovies}) : super(SearchInitial());
 
+  @override
+  Future<void> close() {
+    _debounce?.cancel();
+    return super.close();
+  }
+
   void onQueryChanged(String query) {
     if (_debounce?.isActive ?? false) _debounce!.cancel();
 
