@@ -256,6 +256,8 @@ flutter test --coverage
 - **Screens**: Home, Search, Details, Favorites screens
 - **Widgets**: Reusable UI components like MovieCard
 
+In MVVM terms, Bloc/Cubit are used as the ViewModel layer that mediates between UI widgets (View) and domain use cases (Model).
+
 ## Key Features Implementation
 
 ### Offline Favorites
