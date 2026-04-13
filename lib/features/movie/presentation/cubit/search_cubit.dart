@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_explorer_app/core/error/failures.dart';
-import 'package:movie_explorer_app/features/movie/domain/entities/movie.dart';
 import 'package:movie_explorer_app/features/movie/domain/usecases/params.dart';
 import 'package:movie_explorer_app/features/movie/domain/usecases/search_movie.dart';
 import 'package:movie_explorer_app/features/movie/presentation/cubit/search_state.dart';
@@ -11,9 +10,7 @@ class SearchCubit extends Cubit<SearchState> {
   final SearchMovies searchMovies;
   Timer? _debounce;
   int page = 1;
-  bool isFetching = false;
   String currentQuery = "";
-  List<Movie> movies = [];
 
   SearchCubit({required this.searchMovies}) : super(SearchInitial());
 
@@ -32,8 +29,7 @@ class SearchCubit extends Cubit<SearchState> {
           final result = await searchMovies(
             SearchParams(query: query, page: page),
           );
-          movies = result;
-          emit(SearchLoaded(movies: movies));
+          emit(SearchLoaded(movies: result));
         } catch (e) {
           if (e is Failure) {
             emit(SearchError(message: e.message));
