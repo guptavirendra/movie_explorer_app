@@ -22,30 +22,22 @@ import 'package:movie_explorer_app/features/movie/presentation/cubit/search_cubi
 final singleton = GetIt.instance;
 
 Future<void> init() async {
-  // =========================
-  // 🔥 1. CORE (Hive Init)
-  // =========================
+  // Core
   final hiveService = HiveService();
   await hiveService.init();
 
   singleton.registerLazySingleton<HiveService>(() => hiveService);
   singleton.registerLazySingleton<NavigationService>(() => NavigationService());
 
-  // =========================
-  // 🔥 2. EXTERNAL
-  // =========================
+  // External dependencies
   singleton.registerLazySingleton(() => Dio());
   singleton.registerLazySingleton(() => Connectivity());
 
-  // =========================
-  // 🔥 3. CORE NETWORK
-  // =========================
+  // Networking
   singleton.registerLazySingleton(() => DioClient(singleton<Dio>()));
   singleton.registerLazySingleton(() => NetworkInfo(singleton<Connectivity>()));
 
-  // =========================
-  // 🔥 4. DATA SOURCES
-  // =========================
+  // Data sources
   singleton.registerLazySingleton<MovieRemoteDataSource>(
     () => MovieRemoteDataSourceImpl(singleton<DioClient>()),
   );
@@ -54,9 +46,7 @@ Future<void> init() async {
     () => MovieLocalDatasourceImpl(singleton<HiveService>()),
   );
 
-  // =========================
-  // 🔥 5. REPOSITORY
-  // =========================
+  // Repository
   singleton.registerLazySingleton<MovieRepository>(
     () => MovieRepositoriesImpl(
       singleton<MovieRemoteDataSource>(),
@@ -65,18 +55,14 @@ Future<void> init() async {
     ),
   );
 
-  // =========================
-  // 🔥 6. USE CASES
-  // =========================
+  // Use cases
   singleton.registerLazySingleton(() => GetPopularMovies(singleton()));
   singleton.registerLazySingleton(() => GetMovieDetails(singleton()));
   singleton.registerLazySingleton(() => SearchMovies(singleton()));
   singleton.registerLazySingleton(() => ToggleFavourite(singleton()));
   singleton.registerLazySingleton(() => GetFavourite(singleton()));
 
-  // =========================
-  // 🔥 7. BLOCS / CUBITS
-  // =========================
+  // Blocs / Cubits
   singleton.registerFactory(() => MovieBloc(singleton()));
 
   singleton.registerFactory(
