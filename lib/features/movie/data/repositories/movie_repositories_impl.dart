@@ -17,6 +17,13 @@ class MovieRepositoriesImpl implements MovieRepository {
     this.networkInfo,
   );
 
+  Never _throwFromServerException(ServerException e) {
+    if (e.statusCode == 0) {
+      throw NetworkFailure();
+    }
+    throw ServerFailure();
+  }
+
   @override
   Future<MovieResponse> getPopularMovies(int page) async {
     if (!await networkInfo.isConnected) {
@@ -40,10 +47,7 @@ class MovieRepositoriesImpl implements MovieRepository {
       final result = await remoteDataSource.getMovieDetails(movieId);
       return result.toEntity();
     } on ServerException catch (e) {
-      if (e.statusCode == 0) {
-        throw NetworkFailure();
-      }
-      throw ServerFailure();
+      _throwFromServerException(e);
     }
   }
 
@@ -74,10 +78,7 @@ class MovieRepositoriesImpl implements MovieRepository {
       final result = await remoteDataSource.searchMovies(query, page);
       return result.map((e) => e.toEntity()).toList();
     } on ServerException catch (e) {
-      if (e.statusCode == 0) {
-        throw NetworkFailure();
-      }
-      throw ServerFailure();
+      _throwFromServerException(e);
     }
   }
 }
