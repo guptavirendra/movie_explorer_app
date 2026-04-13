@@ -218,8 +218,11 @@ void main() {
           .thenAnswer((_) async => tMovieResponse);
       return movieBloc;
     },
+    seed: () => MovieLoaded(
+        movies: [tMovieModel.toEntity()],
+        hasReachedMax: false,
+        isLoadingMore: true),
     act: (bloc) {
-      bloc.isFetching = true; // Simulate already fetching
       bloc.add(LoadMoreMovies());
     },
     expect: () => [], // No state changes expected

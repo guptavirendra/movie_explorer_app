@@ -11,7 +11,6 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
   int totalPages = 1;
 
   PageParams page = PageParams(page: 1);
-  bool isFetching = false;
 
   MovieBloc(this.getPopularMovies) : super(MovieInitial()) {
     on<FetchPopularMovies>(_onFetch);
@@ -50,13 +49,13 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
     LoadMoreMovies event,
     Emitter<MovieState> emit,
   ) async {
-    if (isFetching || state is! MovieLoaded) return;
-
-    if (page.page >= totalPages) return;
-
-    isFetching = true;
+    if (state is! MovieLoaded) return;
 
     final currentState = state as MovieLoaded;
+
+    if (currentState.isLoadingMore || currentState.hasReachedMax) return;
+
+    emit(currentState.copyWith(isLoadingMore: true));
 
     try {
       page = PageParams(page: page.page + 1);
@@ -64,14 +63,15 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
       final response = await getPopularMovies(page);
 
       emit(
-        MovieLoaded(
+        currentState.copyWith(
           movies: [...currentState.movies, ...response.movies],
           hasReachedMax: page.page >= totalPages,
+          isLoadingMore: false,
         ),
       );
-    } catch (_) {}
-
-    isFetching = false;
+    } catch (_) {
+      emit(currentState.copyWith(isLoadingMore: false));
+    }
   }
 
   Future<void> _onRefresh(RefreshMovies event, Emitter<MovieState> emit) async {
