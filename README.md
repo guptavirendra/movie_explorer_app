@@ -100,6 +100,7 @@ lib/
 - **flutter_bloc** (^7.0.0): State management with Bloc and Cubit
 - **dio** (^5.9.2): HTTP client for API requests
 - **get_it** (^9.2.1): Dependency injection
+- **go_router** (^14.2.7): Centralized declarative routing
 - **hive_flutter** (^1.1.0): Local database for favorites
 - **hive** (^2.2.3): Hive database core
 - **flutter_dotenv** (^6.0.0): Environment variable management
@@ -267,7 +268,7 @@ In MVVM terms, Bloc/Cubit are used as the ViewModel layer that mediates between 
 - Add/remove favorites with immediate UI feedback
 
 ### Search with Debounce
-- 500ms debounce timer prevents excessive API calls
+- 300ms debounce timer prevents excessive API calls while keeping search responsive
 - Infinite scroll pagination for search results
 - Real-time search as user types
 
@@ -276,6 +277,13 @@ In MVVM terms, Bloc/Cubit are used as the ViewModel layer that mediates between 
 - API errors with user-friendly messages
 - Loading states with progress indicators
 - Error messages displayed in UI with retry functionality
+- Debug-only lightweight Dio request/error logging (without response body dumps)
+
+### Performance & Smoothness
+- Load-more is edge-triggered to prevent pagination request storms
+- Pagination triggers only on downward user scroll near the end of the list
+- Image placeholders use lightweight static blocks to reduce first-load render jank
+- Home screen app bar layout is stabilized to avoid first-frame title shift
 
 ### State Management
 - Bloc for popular movies (complex state with pagination)
