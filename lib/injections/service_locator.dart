@@ -4,6 +4,7 @@ import 'package:get_it/get_it.dart';
 import 'package:movie_explorer_app/core/cache/hive_service.dart';
 import 'package:movie_explorer_app/core/network/dio_client.dart';
 import 'package:movie_explorer_app/core/network/network_info.dart';
+import 'package:movie_explorer_app/core/routes/navigation_service.dart';
 import 'package:movie_explorer_app/features/movie/data/datasources/movie_local_datasource.dart';
 import 'package:movie_explorer_app/features/movie/data/datasources/movie_remote_data_source.dart';
 import 'package:movie_explorer_app/features/movie/data/repositories/movie_repositories_impl.dart';
@@ -26,9 +27,9 @@ Future<void> init() async {
   // =========================
   final hiveService = HiveService();
   await hiveService.init();
-  
 
   singleton.registerLazySingleton<HiveService>(() => hiveService);
+  singleton.registerLazySingleton<NavigationService>(() => NavigationService());
 
   // =========================
   // 🔥 2. EXTERNAL

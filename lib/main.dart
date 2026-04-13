@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:movie_explorer_app/core/routes/app_routes.dart';
+import 'package:movie_explorer_app/core/routes/navigation_service.dart';
 import 'package:movie_explorer_app/injections/service_locator.dart';
 
 void main() async {
@@ -12,6 +13,7 @@ void main() async {
   await init();
   runApp(
     MaterialApp(
+      navigatorKey: singleton<NavigationService>().navigatorKey,
       onGenerateRoute: AppRoutes.generateRoute,
       initialRoute: AppRoutes.home,
     ),

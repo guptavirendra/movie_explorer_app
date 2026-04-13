@@ -3,12 +3,12 @@ import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:movie_explorer_app/core/routes/app_routes.dart';
-import 'package:movie_explorer_app/features/movie/domain/usecases/params.dart';
+import 'package:movie_explorer_app/core/routes/navigation_service.dart';
 import 'package:movie_explorer_app/features/movie/presentation/block/movie_bloc.dart';
 import 'package:movie_explorer_app/features/movie/presentation/block/movie_event.dart';
 import 'package:movie_explorer_app/features/movie/presentation/block/movie_state.dart';
 import 'package:movie_explorer_app/features/movie/presentation/widget/movie_card.dart';
+import 'package:movie_explorer_app/injections/service_locator.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -73,13 +73,13 @@ class _HomeScreenState extends State<HomeScreen> {
           IconButton(
             icon: const Icon(Icons.search),
             onPressed: () {
-              Navigator.pushNamed(context, AppRoutes.search);
+              singleton<NavigationService>().goToSearch();
             },
           ),
           IconButton(
             icon: const Icon(Icons.favorite),
             onPressed: () {
-              Navigator.pushNamed(context, AppRoutes.favourites);
+              singleton<NavigationService>().goToFavourites();
             },
           ),
         ],
@@ -132,10 +132,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         return MovieCard(
                           movie: movie,
                           onTap: () {
-                            Navigator.pushNamed(
-                              context,
-                              AppRoutes.details,
-                              arguments: MovieDetailsParams(movie.id),
+                            singleton<NavigationService>().goToMovieDetails(
+                              movie.id,
                             );
                           },
                         );

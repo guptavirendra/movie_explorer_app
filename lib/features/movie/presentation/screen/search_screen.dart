@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:movie_explorer_app/core/routes/app_routes.dart';
-import 'package:movie_explorer_app/features/movie/domain/usecases/params.dart';
+import 'package:movie_explorer_app/core/routes/navigation_service.dart';
+import 'package:movie_explorer_app/injections/service_locator.dart';
 
 import '../cubit/search_cubit.dart';
 import '../cubit/search_state.dart';
@@ -107,8 +107,7 @@ class _SearchScreenState extends State<SearchScreen> {
                         leading: SizedBox(
                           width: 60,
                           height: 90,
-                          child:
-                              movie.posterPath != null &&
+                          child: movie.posterPath != null &&
                                   movie.posterPath!.isNotEmpty
                               ? CachedNetworkImage(
                                   imageUrl:
@@ -120,11 +119,8 @@ class _SearchScreenState extends State<SearchScreen> {
                         title: Text(movie.title),
                         subtitle: Text("⭐ ${movie.rating}"),
                         onTap: () {
-                          // Navigate to details page
-                          Navigator.pushNamed(
-                            context,
-                            AppRoutes.details,
-                            arguments: MovieDetailsParams(movie.id),
+                          singleton<NavigationService>().goToMovieDetails(
+                            movie.id,
                           );
                         },
                       );
