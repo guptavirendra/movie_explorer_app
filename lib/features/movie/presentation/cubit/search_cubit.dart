@@ -31,11 +31,7 @@ class SearchCubit extends Cubit<SearchState> {
           );
           emit(SearchLoaded(movies: result));
         } catch (e) {
-          if (e is Failure) {
-            emit(SearchError(message: e.message));
-          } else {
-            emit(SearchError(message: e.toString()));
-          }
+          emit(SearchError(message: e is Failure ? e.message : e.toString()));
         }
       }
     });
@@ -87,7 +83,7 @@ class SearchCubit extends Cubit<SearchState> {
         emit(SearchLoaded(movies: movies, hasReachedMax: false));
       }
     } catch (e) {
-      emit(SearchError(message: e.toString()));
+      emit(SearchError(message: e is Failure ? e.message : e.toString()));
     }
   }
 }

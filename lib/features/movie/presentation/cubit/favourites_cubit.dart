@@ -22,11 +22,7 @@ class FavouritesCubit extends Cubit<FavouritesState> {
         emit(FavouritesLoaded(movies: movies));
       }
     } catch (e) {
-      if (e is Failure) {
-        emit(FavouritesError(message: e.message));
-      } else {
-        emit(FavouritesError(message: e.toString()));
-      }
+      emit(FavouritesError(message: e is Failure ? e.message : e.toString()));
     }
   }
 

@@ -28,11 +28,7 @@ class MovieDetailsCubit extends Cubit<MovieDetailsState> {
 
       emit(MovieDetailsLoaded(movie, isFavorite: isFavorite));
     } catch (e) {
-      if (e is Failure) {
-        emit(MovieDetailsError(e.message));
-      } else {
-        emit(MovieDetailsError(e.toString()));
-      }
+      emit(MovieDetailsError(e is Failure ? e.message : e.toString()));
     }
   }
 
