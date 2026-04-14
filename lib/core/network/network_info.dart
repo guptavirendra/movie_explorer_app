@@ -7,6 +7,10 @@ class NetworkInfo {
 
   NetworkInfo(this.connectivity);
 
+  Stream<List<ConnectivityResult>> get onConnectivityChanged {
+    return connectivity.onConnectivityChanged;
+  }
+
   Future<bool> get isConnected async {
     final connectivityResult = await connectivity.checkConnectivity();
     if (connectivityResult.contains(ConnectivityResult.none)) {

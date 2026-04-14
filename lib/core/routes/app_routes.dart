@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:movie_explorer_app/core/network/network_info.dart';
 import 'package:movie_explorer_app/core/routes/navigation_service.dart';
 import 'package:movie_explorer_app/features/movie/domain/usecases/params.dart';
-import 'package:movie_explorer_app/features/movie/presentation/block/movie_bloc.dart';
-import 'package:movie_explorer_app/features/movie/presentation/block/movie_event.dart';
+import 'package:movie_explorer_app/features/movie/presentation/bloc/movie_bloc.dart';
+import 'package:movie_explorer_app/features/movie/presentation/bloc/movie_event.dart';
 import 'package:movie_explorer_app/features/movie/presentation/cubit/favourites_cubit.dart';
 import 'package:movie_explorer_app/features/movie/presentation/cubit/movie_details_cubit.dart';
 import 'package:movie_explorer_app/features/movie/presentation/cubit/search_cubit.dart';
@@ -32,6 +33,7 @@ class AppRoutes {
             create: (_) => singleton<MovieBloc>()..add(FetchPopularMovies()),
             child: HomeScreen(
               navigationService: singleton<NavigationService>(),
+              networkInfo: singleton<NetworkInfo>(),
             ),
           ),
         ),

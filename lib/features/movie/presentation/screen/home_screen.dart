@@ -4,16 +4,22 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movie_explorer_app/core/network/network_info.dart';
 import 'package:movie_explorer_app/core/routes/navigation_service.dart';
-import 'package:movie_explorer_app/features/movie/presentation/block/movie_bloc.dart';
-import 'package:movie_explorer_app/features/movie/presentation/block/movie_event.dart';
-import 'package:movie_explorer_app/features/movie/presentation/block/movie_state.dart';
+import 'package:movie_explorer_app/features/movie/presentation/bloc/movie_bloc.dart';
+import 'package:movie_explorer_app/features/movie/presentation/bloc/movie_event.dart';
+import 'package:movie_explorer_app/features/movie/presentation/bloc/movie_state.dart';
 import 'package:movie_explorer_app/features/movie/presentation/widget/movie_card.dart';
 
 class HomeScreen extends StatefulWidget {
   final NavigationService navigationService;
+  final NetworkInfo networkInfo;
 
-  const HomeScreen({super.key, required this.navigationService});
+  const HomeScreen({
+    super.key,
+    required this.navigationService,
+    required this.networkInfo,
+  });
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -30,7 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
 
-    connectivitySub = Connectivity().onConnectivityChanged.listen((result) {
+    connectivitySub = widget.networkInfo.onConnectivityChanged.listen((result) {
       final isNowConnected = !result.contains(ConnectivityResult.none);
 
       if (!hasInternet && isNowConnected) {

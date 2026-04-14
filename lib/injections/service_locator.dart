@@ -14,7 +14,7 @@ import 'package:movie_explorer_app/features/movie/domain/usecases/get_movie_deta
 import 'package:movie_explorer_app/features/movie/domain/usecases/get_popular_movies.dart';
 import 'package:movie_explorer_app/features/movie/domain/usecases/search_movie.dart';
 import 'package:movie_explorer_app/features/movie/domain/usecases/toggle_favourite.dart';
-import 'package:movie_explorer_app/features/movie/presentation/block/movie_bloc.dart';
+import 'package:movie_explorer_app/features/movie/presentation/bloc/movie_bloc.dart';
 import 'package:movie_explorer_app/features/movie/presentation/cubit/favourites_cubit.dart';
 import 'package:movie_explorer_app/features/movie/presentation/cubit/movie_details_cubit.dart';
 import 'package:movie_explorer_app/features/movie/presentation/cubit/search_cubit.dart';

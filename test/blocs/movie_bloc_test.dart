@@ -6,9 +6,9 @@ import 'package:movie_explorer_app/features/movie/data/models/movie_model.dart';
 import 'package:movie_explorer_app/features/movie/domain/entities/movie_response.dart';
 import 'package:movie_explorer_app/features/movie/domain/usecases/get_popular_movies.dart';
 import 'package:movie_explorer_app/features/movie/domain/usecases/params.dart';
-import 'package:movie_explorer_app/features/movie/presentation/block/movie_bloc.dart';
-import 'package:movie_explorer_app/features/movie/presentation/block/movie_event.dart';
-import 'package:movie_explorer_app/features/movie/presentation/block/movie_state.dart';
+import 'package:movie_explorer_app/features/movie/presentation/bloc/movie_bloc.dart';
+import 'package:movie_explorer_app/features/movie/presentation/bloc/movie_event.dart';
+import 'package:movie_explorer_app/features/movie/presentation/bloc/movie_state.dart';
 
 // 🎯 Mock the GetPopularMovies usecase
 class MockGetPopularMovies extends Mock implements GetPopularMovies {}
