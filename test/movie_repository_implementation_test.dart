@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:movie_explorer_app/core/error/failures.dart';
 import 'package:movie_explorer_app/features/movie/data/models/movie_model.dart';
 import 'package:movie_explorer_app/features/movie/data/models/popular_movies_response_model.dart';
 import 'package:movie_explorer_app/features/movie/data/repositories/movie_repositories_impl.dart';
@@ -58,6 +59,24 @@ void main() {
     expect(result.movies.first.id, tMovie.id);
 
     verify(() => mockRemoteDataSource.getPopularMovies(1)).called(1);
+  });
+
+  test('should preserve server error messages from the API', () async {
+    when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => true);
+    when(() => mockRemoteDataSource.getPopularMovies(1)).thenThrow(
+      ServerException(message: 'Invalid API key', statusCode: 401),
+    );
+
+    expect(
+      () => repository.getPopularMovies(1),
+      throwsA(
+        isA<ServerFailure>().having(
+          (failure) => failure.message,
+          'message',
+          'Invalid API key',
+        ),
+      ),
+    );
   });
 
   // ✅ This test ensures that the MovieRepositoriesImpl can be instantiated without errors.

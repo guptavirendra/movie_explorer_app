@@ -125,7 +125,13 @@ void main() {
       // 🎬 Act & Assert: Verify ServerFailure is thrown
       expect(
         () => repository.getPopularMovies(1),
-        throwsA(isA<ServerFailure>()),
+        throwsA(
+          isA<ServerFailure>().having(
+            (failure) => failure.message,
+            'message',
+            'Server error',
+          ),
+        ),
       );
     },
   );

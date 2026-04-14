@@ -21,7 +21,7 @@ class MovieRepositoriesImpl implements MovieRepository {
     if (e.statusCode == 0) {
       throw NetworkFailure();
     }
-    throw ServerFailure();
+    throw ServerFailure(message: e.message);
   }
 
   Never _throwCacheFailure() {

@@ -4,18 +4,19 @@ abstract class Failure {
 }
 
 class ServerFailure extends Failure {
-  ServerFailure()
-    : super("An error occurred while fetching data from the server.");
+  ServerFailure({String? message})
+      : super(message ??
+            "An error occurred while fetching data from the server.");
 }
 
 class CacheFailure extends Failure {
   CacheFailure()
-    : super("An error occurred while fetching data from the cache.");
+      : super("An error occurred while fetching data from the cache.");
 }
 
 class NetworkFailure extends Failure {
   NetworkFailure()
-    : super("An error occurred while fetching data from the network.");
+      : super("An error occurred while fetching data from the network.");
 }
 
 class ServerException implements Exception {

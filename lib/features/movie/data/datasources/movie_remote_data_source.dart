@@ -16,6 +16,10 @@ class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
   MovieRemoteDataSourceImpl(this.dioClient);
 
   ServerException _mapDioException(DioException e) {
+    final responseData = e.response?.data;
+    final responseMessage = responseData is Map<String, dynamic>
+        ? responseData['status_message'] as String?
+        : null;
     final isNetworkIssue = e.type == DioExceptionType.connectionError ||
         e.type == DioExceptionType.connectionTimeout ||
         e.type == DioExceptionType.receiveTimeout ||
@@ -23,7 +27,11 @@ class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
         e.type == DioExceptionType.unknown;
 
     return ServerException(
-      message: e.response?.statusMessage ?? e.message ?? 'Server Error',
+      message: e.error?.toString() ??
+          responseMessage ??
+          e.response?.statusMessage ??
+          e.message ??
+          'Server Error',
       statusCode: isNetworkIssue ? 0 : (e.response?.statusCode ?? 500),
     );
   }
