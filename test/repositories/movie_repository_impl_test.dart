@@ -183,6 +183,7 @@ void main() {
     'getMovieDetails should return Movie when successful',
     () async {
       // 🔧 Arrange: Mock dataset returns valid movie
+      when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => true);
       when(() => mockRemoteDataSource.getMovieDetails(1))
           .thenAnswer((_) async => tMovieModel);
 
@@ -195,6 +196,7 @@ void main() {
       expect(result.title, "Test Movie");
 
       // 🔍 Verify: Remote datasource was called
+      verify(() => mockNetworkInfo.isConnected).called(1);
       verify(() => mockRemoteDataSource.getMovieDetails(1)).called(1);
     },
   );
@@ -202,17 +204,18 @@ void main() {
   // ✅ TEST 6: Handle network error in getMovieDetails
   // 📌 Purpose: Verify network errors are converted to NetworkFailure
   test(
-    'getMovieDetails should throw NetworkFailure on connection error',
+    'getMovieDetails should throw NetworkFailure when offline',
     () async {
-      // 🔧 Arrange: Simulate connection error
-      when(() => mockRemoteDataSource.getMovieDetails(1))
-          .thenThrow(ServerException(message: 'No internet', statusCode: 0));
+      // 🔧 Arrange: Simulate offline state
+      when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => false);
 
       // 🎬 Act & Assert: Verify NetworkFailure is thrown
       expect(
         () => repository.getMovieDetails(1),
         throwsA(isA<NetworkFailure>()),
       );
+
+      verifyNever(() => mockRemoteDataSource.getMovieDetails(any()));
     },
   );
 
@@ -226,6 +229,7 @@ void main() {
     'searchMovies should return list of movies',
     () async {
       // 🔧 Arrange: Setup search results
+      when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => true);
       when(() => mockRemoteDataSource.searchMovies('Inception', 1))
           .thenAnswer((_) async => [tMovieModel]);
 
@@ -237,6 +241,7 @@ void main() {
       expect(result.first.title, "Test Movie");
 
       // 🔍 Verify: Search method was called
+      verify(() => mockNetworkInfo.isConnected).called(1);
       verify(() => mockRemoteDataSource.searchMovies('Inception', 1)).called(1);
     },
   );
@@ -247,6 +252,7 @@ void main() {
     'searchMovies should return empty list when no results',
     () async {
       // 🔧 Arrange: Setup empty search results
+      when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => true);
       when(() => mockRemoteDataSource.searchMovies('Nonexistent', 1))
           .thenAnswer((_) async => []);
 
@@ -255,6 +261,20 @@ void main() {
 
       // ✔️ Assert: Verify empty list
       expect(result, isEmpty);
+    },
+  );
+
+  test(
+    'searchMovies should throw NetworkFailure when offline',
+    () async {
+      when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => false);
+
+      expect(
+        () => repository.searchMovies('Inception', 1),
+        throwsA(isA<NetworkFailure>()),
+      );
+
+      verifyNever(() => mockRemoteDataSource.searchMovies(any(), any()));
     },
   );
 

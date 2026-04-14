@@ -24,15 +24,19 @@ class MovieRepositoriesImpl implements MovieRepository {
     throw ServerFailure(message: e.message);
   }
 
+  Future<void> _ensureConnected() async {
+    if (!await networkInfo.isConnected) {
+      throw NetworkFailure();
+    }
+  }
+
   Never _throwCacheFailure() {
     throw CacheFailure();
   }
 
   @override
   Future<MovieResponse> getPopularMovies(int page) async {
-    if (!await networkInfo.isConnected) {
-      throw NetworkFailure();
-    }
+    await _ensureConnected();
     try {
       final data = await remoteDataSource.getPopularMovies(page);
       final movies = data.movies.map((movie) => movie.toEntity()).toList();
@@ -45,6 +49,7 @@ class MovieRepositoriesImpl implements MovieRepository {
 
   @override
   Future<Movie> getMovieDetails(int movieId) async {
+    await _ensureConnected();
     try {
       final result = await remoteDataSource.getMovieDetails(movieId);
       return result.toEntity();
@@ -83,6 +88,7 @@ class MovieRepositoriesImpl implements MovieRepository {
 
   @override
   Future<List<Movie>> searchMovies(String query, int page) async {
+    await _ensureConnected();
     try {
       final result = await remoteDataSource.searchMovies(query, page);
       return result.map((e) => e.toEntity()).toList();
